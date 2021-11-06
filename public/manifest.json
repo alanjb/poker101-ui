@@ -1,0 +1,8 @@
+{
+  "short_name": "Poker101",
+  "name": "Poker101 Web App",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#3b3c3d"
+}

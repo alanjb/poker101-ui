@@ -1,0 +1,72 @@
+
+html, body {
+    margin: 0; 
+    height: 100%; 
+    overflow: hidden;
+}
+
+.btn {
+    border-radius: 2px;
+}
+
+
+
+.game-board-container {
+    width: 100%;
+    height: 100%;
+    background-color: #008b48;
+    position: absolute;
+    left: 0;
+    text-align: right;
+
+    .chip-pot-container {
+        text-align: center;
+        position: fixed;
+        left: 45%;
+        top: 45%;
+    }
+
+    .player-container {
+        text-align: center;
+        position: absolute;
+
+        .player-cards-container {
+            .backOfCard {
+                margin-right: 5px;
+                width: 30px;
+                height: 50px;
+            }
+        }
+    }
+
+    .opposing-player-container0 {
+        bottom: 30%;
+        left: 5%;
+    }
+
+    .opposing-player-container1 {
+        bottom: 60%;
+        left: 5%;
+    }
+
+    .opposing-player-container2 {
+        bottom: 80%;
+        left: 43%;
+    }
+
+    .opposing-player-container3 {
+        bottom: 60%;
+        left: 80%;
+    }
+
+    .opposing-player-container4 {
+        bottom: 30%;
+        left: 80%;
+    }
+
+    .user-player-container {
+        bottom: 10%;
+        left: 43%;
+    }
+
+}
