@@ -4,7 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 
 const HomeContainer = () => (
   <Fragment>
-    <div className="home-container">
+    <div className="home-container component-container">
       <Container className="home-header themed-container" fluid={true}>
         <Row>
           <Col>

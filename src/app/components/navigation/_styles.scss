@@ -1,0 +1,26 @@
+.navigation-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: #1c1d1b;
+    text-align: right;
+    align-items: center;
+    color: white;
+
+    .logo {
+        margin-left: 13px;
+        font-weight: 900;
+    }
+
+    .nav-link {
+        color: white;
+    }
+
+    .log-button {
+        border-radius: 0px;
+    }
+
+    .navigation-links {
+        display: flex;
+        padding: 0px;
+    }
+}

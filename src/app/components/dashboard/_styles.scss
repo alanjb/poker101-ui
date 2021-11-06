@@ -1,0 +1,17 @@
+.dashboard-container {
+
+    .dashboard-header {
+        margin-top: 20px;
+        margin-left: auto; 
+        margin-right: 0;
+
+        .dashboard-header-text {
+            font-size: 30px;
+            color: white;
+        }
+
+        .create-button-container {
+            display: flex;
+        }
+    }
+}

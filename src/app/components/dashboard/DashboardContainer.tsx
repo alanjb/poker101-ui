@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import history from '../routing/history';
-import CreateGameModal from '../../game/components/CreateGameModal';
+import history from '../../routing/history';
+import CreateGameModal from '../../../game/components/CreateGameModal';
 import { Button, Col, Container, Row } from 'reactstrap';
-import Game from '../../game/models/Game';
+import Game from '../../../game/models/Game';
 
 class DeviceManagerContainer extends Component {
   state: State = {
