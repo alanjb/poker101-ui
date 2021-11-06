@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Component } from 'react';
+import React, { Component } from 'react';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Game from '../models/Game';
 import Player from '../models/Player';

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import backOfCard from '../../app/assets/back.png';
 import { Button } from 'reactstrap';

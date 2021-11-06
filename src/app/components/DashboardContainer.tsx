@@ -1,4 +1,4 @@
-import { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import history from '../routing/history';
 import CreateGameModal from '../../game/components/CreateGameModal';
 import { Button, Col, Container, Row } from 'reactstrap';

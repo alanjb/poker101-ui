@@ -1,3 +1,4 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import Auth0ProviderWithHistory from "./app/security/auth0Provider";
@@ -6,7 +7,7 @@ import AppContainer from "./app/components/AppContainer";
 import dotenv from 'dotenv';
 import history from './app/routing/history';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './app/styles/main.scss'
+import './app/styles/main.scss';
 
 dotenv.config();
 
