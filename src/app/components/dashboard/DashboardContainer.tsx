@@ -17,25 +17,27 @@ class DeviceManagerContainer extends Component {
       <Fragment>
         <div className="dashboard-container">
           <Container className="component-container dashboard-header themed-container" fluid={true}>
-            <Row>
-              <Col>
-                <h2 className="dashboard-header-text">Dashboard</h2>
-              </Col>
-              <Col>
-                <div className="create-button-container justify-content-end">
-                  <Button className="align-self-end" color="info" onClick={toggleCreateGameModal}>
-                    Create new game
-                  </Button>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <div>
-                  
-                </div>
-              </Col>
-            </Row>
+            <div className="content">
+              <Row>
+                <Col>
+                  <h2 className="dashboard-header-text">Dashboard</h2>
+                </Col>
+                <Col>
+                  <div className="create-button-container justify-content-end">
+                    <Button className="align-self-end" color="info" onClick={toggleCreateGameModal}>
+                      Create new game
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <div>
+                    
+                  </div>
+                </Col>
+              </Row>
+            </div>
           </Container>
         </div>
         <CreateGameModal isOpen={isCreateGameModalOpen} toggle={toggleCreateGameModal} created={gameCreated} />
