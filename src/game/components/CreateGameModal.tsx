@@ -19,7 +19,7 @@ class CreateGameModal extends Component<Props> {
               <Input type="email" name="email" id="exampleEmail" /><br/>
             </FormGroup>
             <FormGroup>
-              <Label className="label-text" for="">Anti price</Label>
+              <Label className="label-text" for="">Ante</Label>
               <Input type="text" name="" id="" /><br/>
             </FormGroup>
             <FormGroup>
