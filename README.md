@@ -17,13 +17,13 @@
 - UI displays the top navbar, and the user's game statistics such as all the games they have played/if they won or lost
 - Contains the create game button that allows users to start a new game
 - 
-### Game
+## Game
 - /src/game/components
 - UI contains the game board that displays the users cards and the the opposing players cards face down in circle. 
 - Contains a real time game log that displays all events that occur in the game
 - Communicates with the server to store game state in the Game table in the database 
 
-### Profile
+## Profile
 - - /src/profile/components
 - UI displays the user's data such as name, email and profile picture 
 - When a user signs in, either through auth0 or a third party (gmail), the users data is sent back to the frontend. 
