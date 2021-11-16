@@ -1,65 +1,88 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState, useEffect } from 'react';
 import history from '../../routing/history';
 import CreateGameModal from '../../../game/components/CreateGameModal';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Game from '../../../game/models/Game';
+import { useAuth0 } from "@auth0/auth0-react";
+import axios from 'axios';
 
-class DeviceManagerContainer extends Component {
-  state: State = {
-    isCreateGameModalOpen: false,
+
+const DashboardContainer = () => {
+  const [isCreateGameModalOpen, toggleCreateGameModal] = useState(false);
+  const { user, getAccessTokenSilently } = useAuth0();
+
+  useEffect(() => {
+    //check global state if user is signed in, once checked the first time, make a boolean that says its was already checked in this session
+
+  });
+
+  function toggle() {
+    toggleCreateGameModal(!isCreateGameModalOpen);
   };
 
-  render() {
-    const { isCreateGameModalOpen } = this.state;
-    const { toggleCreateGameModal, gameCreated } = this;
-
-    return (
-      <Fragment>
-        <div className="dashboard-container">
-          <Container className="component-container dashboard-header themed-container" fluid={true}>
-            <div className="content">
-              <Row>
-                <Col>
-                  <h2 className="dashboard-header-text">Dashboard</h2>
-                </Col>
-                <Col>
-                  <div className="create-button-container justify-content-end">
-                    <Button className="align-self-end" color="info" onClick={toggleCreateGameModal}>
-                      Create new game
-                    </Button>
-                  </div>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <div>
-                    
-                  </div>
-                </Col>
-              </Row>
-            </div>
-          </Container>
-        </div>
-        <CreateGameModal isOpen={isCreateGameModalOpen} toggle={toggleCreateGameModal} created={gameCreated} />
-      </Fragment>
-    );
-  }
-
-  toggleCreateGameModal = () => {
-    this.setState({ isCreateGameModalOpen: !this.state.isCreateGameModalOpen });
-  };
-
-  gameCreated = (game: Game) => {
-    const { toggleCreateGameModal } = this;
-
-    toggleCreateGameModal();
-
+  function gameCreated(game: Game) {
+    toggle();
     history.push(`/game/${1}`);
   }
+
+  function checkUserOnSignIn(){
+    console.log(user);
+
+    //uri changes based on environment, use access token
+    axios
+      .get(`http://localhost:8000/api/user/user`, {
+        params: {
+          email: user?.email
+        }
+      })
+      .then(res => {
+        if(!res.data){
+          //if false then create user. Backend will handle creating id and setting points for user
+          axios
+            .post(`http://localhost:8000/api/user/user`, { email: user?.email })
+            .then(res => {
+              alert("User created \n\n" + res.data);
+            })
+            .catch(error => {
+              alert("Failed to create user \n\n" + error);
+            })
+        } 
+      })
+      .catch(error => {
+        alert("Failed to find user \n\n" + error);
+      })
+  };
+
+  return (
+    <Fragment>
+      <div className="dashboard-container">
+        <Container className="component-container dashboard-header themed-container" fluid={true}>
+          <div className="content">
+            <Row>
+              <Col>
+                <h2 className="dashboard-header-text">Dashboard</h2>
+              </Col>
+              <Col>
+                <div className="create-button-container justify-content-end">
+                  <Button className="align-self-end" color="info" onClick={toggle}>
+                    Create new game
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <div>
+                  <h3 className="">test</h3>
+                </div>
+              </Col>
+            </Row>
+          </div>
+        </Container>
+      </div>
+      <CreateGameModal isOpen={isCreateGameModalOpen} toggle={toggle} created={gameCreated} />
+    </Fragment>
+  );
 }
 
-type State = {
-  isCreateGameModalOpen: boolean;
-}
-
-export default DeviceManagerContainer;
+export default DashboardContainer;

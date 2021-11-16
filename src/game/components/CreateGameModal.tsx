@@ -5,6 +5,7 @@ import Game from '../models/Game';
 import Player from '../models/Player';
 
 class CreateGameModal extends Component<Props> {
+  
   render() {
     const { isOpen, toggle } = this.props;
     const { create } = this;
@@ -22,10 +23,6 @@ class CreateGameModal extends Component<Props> {
               <Label className="label-text" for="">Ante</Label>
               <Input type="text" name="" id="" /><br/>
             </FormGroup>
-            <FormGroup>
-              <Label className="label-text" for="">Invite players (up to 5)</Label>
-              <Input type="text" name="" id="" /><br/>
-            </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -38,26 +35,11 @@ class CreateGameModal extends Component<Props> {
 
   create = () => {
     const { created } = this.props;
-    const playersArray: Partial<Player>[] = [];
-
-    const p1: Partial<Player> = {
-      id: 'gf93j023jg',
-      points: 3823
-    }
-
-    const p2: Partial<Player> = {
-      id: '390gj3h8g2',
-      points: 8390
-    }
-
-    playersArray.push(p1);
-    playersArray.push(p2);
 
     //use Partial here, only need requiredPointsPerPlayer, antiAmount, players
     const newGame: Partial<Game> = {
       requiredPointsPerPlayer: 5000,
       antiAmount: 250,
-      players: playersArray
     }
   
     axios
@@ -84,3 +66,7 @@ type Props = {
   toggle: () => void;
   created: (game: Game) => void;
 };
+
+function useAuth0(): { user: any; } {
+  throw new Error('Function not implemented.');
+}
