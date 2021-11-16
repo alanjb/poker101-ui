@@ -8,28 +8,11 @@ import GamesContainer from './games/GamesContainer';
 
 const DashboardContainer = () => {
   const [isCreateGameModalOpen, toggleCreateGameModal] = useState(false);
-  const [gamesArray, setAllGames] = useState([]);
   const { user, getAccessTokenSilently } = useAuth0();
-
 
   useEffect(() => {
     //check global state if user is signed in, once checked the first time, make a boolean that says its was already checked in this session
   });
-
-  function getGames() {
-    axios
-    .get(`http://localhost:8000/api/game/games`)
-    .then(res => {
-      if(res.data){
-        const { games } = res.data;
-        
-        console.log(games);
-      }
-    })
-    .catch(error => {
-      alert("Failed to create game \n\n" + error);
-    })
-  }
 
   function toggle() {
     toggleCreateGameModal(!isCreateGameModalOpen);
@@ -39,32 +22,41 @@ const DashboardContainer = () => {
     toggle();
   }
 
-  function checkUserOnSignIn(){
-    console.log(user);
+  async function checkUserOnSignIn() {
+    try {
+      const accessToken = await getAccessTokenSilently();
 
-    //uri changes based on environment, use access token
-    axios
-      .get(`http://localhost:8000/api/user/user`, {
-        params: {
-          email: user?.email
-        }
-      })
-      .then(res => {
-        if(!res.data){
-          //if false then create user. Backend will handle creating id and setting points for user
-          axios
-            .post(`http://localhost:8000/api/user/user`, { email: user?.email })
-            .then(res => {
-              alert("User created \n\n" + res.data);
-            })
-            .catch(error => {
-              alert("Failed to create user \n\n" + error);
-            })
-        } 
-      })
-      .catch(error => {
-        alert("Failed to find user \n\n" + error);
-      })
+      //uri changes based on environment
+      axios
+        .get(`http://localhost:8000/api/user/user`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            params: {
+              email: user?.email
+            }
+          }
+        )
+        .then(res => {
+          if(!res.data){
+            //if false then create user. Backend will handle creating id and setting points for user
+            axios
+              .post(`http://localhost:8000/api/user/user`, { email: user?.email })
+              .then(res => {
+                alert("Success! User signed up \n\n" + res.data);
+              })
+              .catch(error => {
+                alert("Failed to sign up user \n\n" + error);
+              })
+          } 
+        })
+        .catch(error => {
+          alert("Failed to find user \n\n" + error);
+        })
+    } catch (error) {
+      alert("Check user failed \n\n" + error);
+    }
   };
 
   return (
@@ -86,7 +78,7 @@ const DashboardContainer = () => {
             </Row>
             <Row>
               <Col>
-                <GamesContainer />
+                <GamesContainer user={user}/>
               </Col>
             </Row>
           </div>

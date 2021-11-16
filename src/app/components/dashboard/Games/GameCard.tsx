@@ -1,29 +1,36 @@
-import React, { Component } from 'react';
-import { Button, Card, CardBody, CardSubtitle, CardText, CardTitle } from 'reactstrap';
+import React from 'react';
+import { Button, Card, CardBody, CardTitle } from 'reactstrap';
+import Game from '../../../../game/models/Game';
+import { useHistory } from "react-router-dom";
 
-class GameCard extends Component<Props> {
-  render() {
-    return (
-      <div>
-        <Card>
-          <CardBody>
-            <CardTitle tag="h5">
-              Game ID: {this.props.title}
-            </CardTitle>
-            <Button>
-              Join Game
-            </Button>
-          </CardBody>
-        </Card>
-      </div>
-    );
+const GameCard = ({ game }: Props) => {
+  const history = useHistory();
+
+  function goToGame() {
+    history.push(`/game/${game.id}`)
   }
+
+  return (
+    <div>
+      <Card>
+        <CardBody>
+          <CardTitle tag="h5">
+            Game ID: {game.id}
+            <div className="players">
+              Players: {game.players}
+            </div>
+          </CardTitle>
+          <Button onClick={() => goToGame()}>
+            Join Game
+          </Button>
+        </CardBody>
+      </Card>
+    </div>
+  );
 }
 
 export default GameCard;
 
 type Props = {
-  title: String;
-  subTitle: String;
-  text: String;
+  game: Game
 };

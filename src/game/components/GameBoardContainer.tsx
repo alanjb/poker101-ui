@@ -8,7 +8,7 @@ class GameContainer extends Component {
   render() {
     return (
       <Fragment>
-        {/* <div className="game-board-container">
+        <div className="game-board-container">
           <div className="chip-pot-container">
             <div className="pot-data">
               Total Pot <br/><br/>
@@ -118,7 +118,7 @@ class GameContainer extends Component {
               Your money: $50.00
             </div>
           </div>
-        </div> */}
+        </div>
       </Fragment>
     );
   }
@@ -137,7 +137,7 @@ class GameContainer extends Component {
         }
       })
       .catch(error => {
-        alert("Error! Failed to create game: " + error);
+        alert("Error! Failed to discard cards: " + error);
       })
   }
 }

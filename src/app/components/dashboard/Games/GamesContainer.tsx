@@ -3,7 +3,7 @@ import Game from '../../../../game/models/Game';
 import GameCard from '../games/GameCard';
 import axios from 'axios';
 
-class GamesContainer extends Component<State> {
+class GamesContainer extends Component<Props, State> {
   state: State =  {
     games: []
   }
@@ -25,17 +25,52 @@ class GamesContainer extends Component<State> {
         }
       })
     .catch(error => {
-      alert("Failed to create game \n\n" + error);
+      alert("Failed to get games \n\n" + error);
     })
   }
 
   render() {
     return (
       <div className="games-container">
-        <h5 className="container-subtitle">Starting</h5>
-        {this.state.games.map(game => {
-          return <GameCard title={game.id} subTitle={game.status} text={game.status}/>
-        })}
+        <div className="games-status-container starting-games-container">
+          <h5 className="container-subtitle">Starting</h5>
+          {this.state.games.map((game, i) => {
+            if (game.status === 'starting') {
+              return <GameCard key={i} game={game}/>
+            }
+          })}
+        </div>
+
+        <div className="games-status-container inProgress-games-container">
+          <h5 className="container-subtitle">In Progress</h5>
+            {this.state.games.map((game,i) => {
+              if (game.status === 'in progress') {
+                return <GameCard key={i} game={game}/>
+              }
+            })}
+        </div>
+
+        <div className="games-status-container starting-games-container">
+          <h5 className="container-subtitle">Complete</h5>
+            {this.state.games.map((game,i) => {
+              if (game.status === 'complete') {
+                return <GameCard key={i} game={game}/>
+              }
+            })}
+        </div>
+
+        <div className="games-status-container inProgress-games-container">
+          <h5 className="container-subtitle">Aborted</h5>
+            {this.state.games.map((game,i) => {
+              if (game.status === 'aborted') {
+                return <GameCard key={i} game={game}/>
+              }
+            })}
+        </div>
+
+        <div className="games-status-container inProgress-games-container">
+          <h5 className="container-subtitle">Wins/Loses</h5>
+        </div>
       </div>
     );
   }
@@ -46,3 +81,7 @@ export default GamesContainer;
 type State = {
   games: Game[];
 }
+
+type Props = {
+  user: unknown;
+};

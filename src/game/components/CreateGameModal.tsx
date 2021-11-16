@@ -5,7 +5,6 @@ import Game from '../models/Game';
 
 class CreateGameModal extends Component<Props> {
 
-  
   render() {
     const { isOpen, toggle } = this.props;
     const { create } = this;
