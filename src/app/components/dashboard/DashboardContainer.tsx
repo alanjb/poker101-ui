@@ -1,20 +1,35 @@
-import React, { Component, Fragment, useState, useEffect } from 'react';
-import history from '../../routing/history';
+import React, { Fragment, useState, useEffect } from 'react';
 import CreateGameModal from '../../../game/components/CreateGameModal';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Game from '../../../game/models/Game';
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
-
+import GamesContainer from './Games/GamesContainer';
 
 const DashboardContainer = () => {
   const [isCreateGameModalOpen, toggleCreateGameModal] = useState(false);
+  const [gamesArray, setAllGames] = useState([]);
   const { user, getAccessTokenSilently } = useAuth0();
+
 
   useEffect(() => {
     //check global state if user is signed in, once checked the first time, make a boolean that says its was already checked in this session
-
   });
+
+  function getGames() {
+    axios
+    .get(`http://localhost:8000/api/game/games`)
+    .then(res => {
+      if(res.data){
+        const { games } = res.data;
+        
+        console.log(games);
+      }
+    })
+    .catch(error => {
+      alert("Failed to create game \n\n" + error);
+    })
+  }
 
   function toggle() {
     toggleCreateGameModal(!isCreateGameModalOpen);
@@ -22,7 +37,6 @@ const DashboardContainer = () => {
 
   function gameCreated(game: Game) {
     toggle();
-    history.push(`/game/${1}`);
   }
 
   function checkUserOnSignIn(){
@@ -72,9 +86,7 @@ const DashboardContainer = () => {
             </Row>
             <Row>
               <Col>
-                <div>
-                  <h3 className="">test</h3>
-                </div>
+                <GamesContainer />
               </Col>
             </Row>
           </div>

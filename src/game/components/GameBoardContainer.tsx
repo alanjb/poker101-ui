@@ -1,15 +1,14 @@
-/* eslint-disable jsx-a11y/alt-text */
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import backOfCard from '../../app/assets/back.png';
 import { Button } from 'reactstrap';
 
-class DeviceManagerContainer extends Component {
+class GameContainer extends Component {
 
   render() {
     return (
       <Fragment>
-        <div className="game-board-container">
+        {/* <div className="game-board-container">
           <div className="chip-pot-container">
             <div className="pot-data">
               Total Pot <br/><br/>
@@ -119,7 +118,7 @@ class DeviceManagerContainer extends Component {
               Your money: $50.00
             </div>
           </div>
-        </div>
+        </div> */}
       </Fragment>
     );
   }
@@ -143,4 +142,4 @@ class DeviceManagerContainer extends Component {
   }
 }
 
-export default DeviceManagerContainer;
+export default GameContainer;

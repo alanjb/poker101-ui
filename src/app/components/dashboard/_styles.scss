@@ -14,3 +14,29 @@
         }
     }
 }
+
+.card {
+    border: 1px solid #1c1d1b;
+    background-color: #373836 !important;
+
+    .card-body {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .card-title {
+        color: #ffffff;
+    } 
+
+    .card-subtitle {
+        color: #ffffff !important;
+    } 
+}
+
+.games-container {
+    margin-top: 15px;
+}
+
+.container-subtitle {
+    color: #ffffff !important;
+}

@@ -2,9 +2,9 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import Game from '../models/Game';
-import Player from '../models/Player';
 
 class CreateGameModal extends Component<Props> {
+
   
   render() {
     const { isOpen, toggle } = this.props;
@@ -39,7 +39,7 @@ class CreateGameModal extends Component<Props> {
     //use Partial here, only need requiredPointsPerPlayer, antiAmount, players
     const newGame: Partial<Game> = {
       requiredPointsPerPlayer: 5000,
-      antiAmount: 250,
+      anteAmount: 250,
     }
   
     axios
@@ -47,8 +47,6 @@ class CreateGameModal extends Component<Props> {
       .then(res => {
         if(res.data){
           const { game } = res.data;
-
-          console.log(game)
 
           created(game);
         }
@@ -66,7 +64,3 @@ type Props = {
   toggle: () => void;
   created: (game: Game) => void;
 };
-
-function useAuth0(): { user: any; } {
-  throw new Error('Function not implemented.');
-}

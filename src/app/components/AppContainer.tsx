@@ -7,10 +7,10 @@ import {
   Route,
 } from "react-router-dom";
 import HomeContainer from "./home/HomeContainer";
-import ProfileContainer from '../../profile/components/ProfileContainer';
+import ProfileContainer from '../../user/components/ProfileContainer';
 import ProtectedRoute from '../security/protected-route';
 import DashboardContainer from './dashboard/DashboardContainer';
-import GameContainer from '../../game/components/GameContainer';
+import GameContainer from '../../game/components/GameBoardContainer';
 
 const AppContainer = () => {
   const { isLoading } = useAuth0();
