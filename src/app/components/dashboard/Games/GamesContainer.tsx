@@ -1,10 +1,9 @@
-import axios from 'axios';
 import React, { Component } from 'react';
 import Game from '../../../../game/models/Game';
-import GameCard from '../Games/GameCard';
+import GameCard from '../games/GameCard';
+import axios from 'axios';
 
-
-class GamesContainer extends Component<Props, State> {
+class GamesContainer extends Component<State> {
   state: State =  {
     games: []
   }
@@ -47,7 +46,3 @@ export default GamesContainer;
 type State = {
   games: Game[];
 }
-
-type Props = {
-
-};

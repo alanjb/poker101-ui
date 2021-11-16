@@ -4,7 +4,7 @@ import { Button, Col, Container, Row } from 'reactstrap';
 import Game from '../../../game/models/Game';
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
-import GamesContainer from './Games/GamesContainer';
+import GamesContainer from './games/GamesContainer';
 
 const DashboardContainer = () => {
   const [isCreateGameModalOpen, toggleCreateGameModal] = useState(false);
