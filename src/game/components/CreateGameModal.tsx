@@ -35,7 +35,6 @@ class CreateGameModal extends Component<Props> {
   create = () => {
     const { created } = this.props;
 
-    //use Partial here, only need requiredPointsPerPlayer, antiAmount, players
     const newGame: Partial<Game> = {
       requiredPointsPerPlayer: 5000,
       anteAmount: 250,

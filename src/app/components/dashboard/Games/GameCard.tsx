@@ -15,7 +15,7 @@ const GameCard = ({ game }: Props) => {
       <Card>
         <CardBody>
           <CardTitle tag="h5">
-            Game ID: {game.id}
+            Game ID: {game.status}
             <div className="players">
               Players: {game.players}
             </div>

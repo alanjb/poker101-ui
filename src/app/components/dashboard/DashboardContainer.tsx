@@ -12,6 +12,7 @@ const DashboardContainer = () => {
 
   useEffect(() => {
     //check global state if user is signed in, once checked the first time, make a boolean that says its was already checked in this session
+    checkUserOnSignIn();
   });
 
   function toggle() {
@@ -39,20 +40,19 @@ const DashboardContainer = () => {
           }
         )
         .then(res => {
-          if(!res.data){
-            //if false then create user. Backend will handle creating id and setting points for user
+          if (res.data.user == null) {
             axios
-              .post(`http://localhost:8000/api/user/user`, { email: user?.email })
+              .post(`http://localhost:8000/api/user/user`, { email: user?.email, firstName: user?.given_name, lastName: user?.family_name })
               .then(res => {
-                alert("Success! User signed up \n\n" + res.data);
+                console.dir(res.data.user);
               })
               .catch(error => {
-                alert("Failed to sign up user \n\n" + error);
+                console.log("Success! User signed up \n\n" + error);
               })
-          } 
+          }
         })
         .catch(error => {
-          alert("Failed to find user \n\n" + error);
+          console.log('Process failed while finding user')
         })
     } catch (error) {
       alert("Check user failed \n\n" + error);
