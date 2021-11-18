@@ -18,7 +18,7 @@ class GamesContainer extends Component<Props, State> {
       .then(res => {
         if(res.data){
           const { games } = res.data;
-
+          
           this.setState({
             games: games
           });
@@ -83,5 +83,5 @@ type State = {
 }
 
 type Props = {
-  user: unknown;
+
 };

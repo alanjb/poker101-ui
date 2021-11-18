@@ -2,18 +2,11 @@ import React, { Fragment, useState, useEffect } from 'react';
 import CreateGameModal from '../../../game/components/CreateGameModal';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Game from '../../../game/models/Game';
-import { useAuth0 } from "@auth0/auth0-react";
 import axios from 'axios';
 import GamesContainer from './games/GamesContainer';
 
 const DashboardContainer = () => {
   const [isCreateGameModalOpen, toggleCreateGameModal] = useState(false);
-  const { user, getAccessTokenSilently } = useAuth0();
-
-  useEffect(() => {
-    //check global state if user is signed in, once checked the first time, make a boolean that says its was already checked in this session
-    checkUserOnSignIn();
-  });
 
   function toggle() {
     toggleCreateGameModal(!isCreateGameModalOpen);
@@ -22,42 +15,6 @@ const DashboardContainer = () => {
   function gameCreated(game: Game) {
     toggle();
   }
-
-  async function checkUserOnSignIn() {
-    try {
-      const accessToken = await getAccessTokenSilently();
-
-      //uri changes based on environment
-      axios
-        .get(`http://localhost:8000/api/user/user`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-            params: {
-              email: user?.email
-            }
-          }
-        )
-        .then(res => {
-          if (res.data.user == null) {
-            axios
-              .post(`http://localhost:8000/api/user/user`, { email: user?.email, firstName: user?.given_name, lastName: user?.family_name })
-              .then(res => {
-                console.dir(res.data.user);
-              })
-              .catch(error => {
-                console.log("Success! User signed up \n\n" + error);
-              })
-          }
-        })
-        .catch(error => {
-          console.log('Process failed while finding user')
-        })
-    } catch (error) {
-      alert("Check user failed \n\n" + error);
-    }
-  };
 
   return (
     <Fragment>
@@ -78,7 +35,7 @@ const DashboardContainer = () => {
             </Row>
             <Row>
               <Col>
-                <GamesContainer user={user}/>
+                <GamesContainer/>
               </Col>
             </Row>
           </div>
