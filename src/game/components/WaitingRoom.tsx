@@ -1,25 +1,25 @@
 import React, { Component, Fragment } from 'react';
 import { Container, Row, Col, Button } from 'reactstrap';
-import GamesContainer from '../../app/components/dashboard/games/GamesContainer';
+import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
+import dealerSvg from  '../../app/assets/icons/dice-5-fill.svg';
+import waitSvg from  '../../app/assets/icons/hourglass-split.svg';
 
-class WaitingRoom extends Component {
+let users = [
+             {handle: '@Alan', isDealer: 'true', isReady: true}, 
+             {handle: '@Matt', isDealer: 'false', isReady: false}, 
+             {handle: '@Obeyd', isDealer: 'false', isReady: true}
+            ];
 
+class WaitingRoom extends Component { 
   render() {
     return (
       <Fragment>
       <div className="waiting-room-container">
-        <Container className="component-container dashboard-header themed-container" fluid={true}>
+        <Container className="component-container themed-container" fluid={true}>
           <div className="content">
             <Row>
               <Col>
-                <h2 className="dashboard-header-text">Dashboard</h2>
-              </Col>
-              <Col>
-                <div className="create-button-container justify-content-end">
-                  <Button className="align-self-end" color="info" onClick={() => { }}>
-                    Create new game
-                  </Button>
-                </div>
+                <h3 className="text-light">Waiting Room</h3>
               </Col>
             </Row>
             <Row>
@@ -28,6 +28,25 @@ class WaitingRoom extends Component {
               </Col>
             </Row>
           </div>
+          <table className="table table-light">
+            <thead>
+              <tr>
+              <th scope="col">#</th>
+              <th scope="col">Handle</th>
+              <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user, index) => 
+                <tr>
+                  <th scope="row">{index+1}</th>
+                  <td>{`${user.handle} `}
+                      {user.isDealer === 'true' && <img src={dealerSvg}></img>}
+                  </td>
+                  <td> {user.isReady ? <img src={checkSvg}></img> : <img src={waitSvg}></img>}</td>
+                </tr>)}
+            </tbody>
+          </table>
         </Container>
       </div>
       </Fragment>
