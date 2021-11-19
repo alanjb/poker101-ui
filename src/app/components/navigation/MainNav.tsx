@@ -1,14 +1,12 @@
-import {NavLink} from "react-router-dom";
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { NavLink } from "react-router-dom";
 import { Button } from "reactstrap";
 
 const MainNav = () => {
-  const { loginWithRedirect, logout, user, isLoading } = useAuth0(); 
 
   return (
     <div className="navigation-links">
-      {!isLoading && user && ( <NavLink
+      {( <NavLink
         to="/dashboard"
         exact
         className="nav-link"
@@ -18,7 +16,7 @@ const MainNav = () => {
       </NavLink>
       )}
 
-      {!isLoading && user && (<NavLink
+      {(<NavLink
         to="/profile"
         exact
         className="nav-link"
@@ -28,18 +26,18 @@ const MainNav = () => {
       </NavLink>
       )}
 
-      {!isLoading && !user && (
+      {(
         <Button 
           color="warning log-button"
-          onClick={() => loginWithRedirect()}
+          onClick={() => console.log('login')}
         >
           Log In
         </Button>
       )} 
       
-      {!isLoading && user && (
+      {(
         <Button color="danger log-button"
-        onClick={() => logout()}
+        onClick={() => console.log('logout')}
         >
           Log Out
         </Button>
