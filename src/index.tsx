@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import Auth0ProviderWithHistory from "./app/security/auth0Provider";
 import { Router } from "react-router-dom";
 import AppContainer from "./app/components/AppContainer";
 import history from './app/routing/history';
@@ -10,9 +9,7 @@ import './app/styles/main.scss';
 
 ReactDOM.render(
     <Router history={history}>
-      <Auth0ProviderWithHistory>
-        <AppContainer/>
-      </Auth0ProviderWithHistory>
+      <AppContainer/>
     </Router>,
     document.getElementById("root")
 );

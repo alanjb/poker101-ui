@@ -42,12 +42,3 @@ Validation
 ### Profile
 - /src/profile/components
 - UI displays the user's data such as name, email and profile picture 
-- When a user signs in, either through auth0 or a third party (gmail), the users data is sent back to the frontend. 
-  The frontend will then query the backend to check if the user already exists through their email.   
-  If it doesn't we will store it in the database. 
-
-
-
-
-
-
