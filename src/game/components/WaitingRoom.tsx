@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Container, Row, Col, Button } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
 import dealerSvg from  '../../app/assets/icons/dice-5-fill.svg';
 import waitSvg from  '../../app/assets/icons/hourglass-split.svg';
@@ -41,9 +41,9 @@ class WaitingRoom extends Component {
                 <tr>
                   <th scope="row">{index+1}</th>
                   <td>{`${user.handle} `}
-                      {user.isDealer === 'true' && <img src={dealerSvg}></img>}
+                      {user.isDealer === 'true' && <img alt='dealer' src={dealerSvg}></img>}
                   </td>
-                  <td> {user.isReady ? <img src={checkSvg}></img> : <img src={waitSvg}></img>}</td>
+                  <td> {user.isReady ? <img alt='check' src={checkSvg}></img> : <img alt='wait' src={waitSvg}></img>}</td>
                 </tr>)}
             </tbody>
           </table>

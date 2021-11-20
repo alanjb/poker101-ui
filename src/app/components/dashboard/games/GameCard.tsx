@@ -8,7 +8,6 @@ const GameCard = ({ game }: Props) => {
   const history = useHistory();
 
   function addPlayer() {
-    // history.push(`/game/${game.id}`)
     axios
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
@@ -17,10 +16,10 @@ const GameCard = ({ game }: Props) => {
         }
       })
     .then(res => {
-
+      history.push(`/game/lobby/${game.id}`);
     })
   .catch(error => {
-    // alert("Failed to get games \n\n" + error);
+    alert("Error! Could not add player to this game \n\n" + error);
   })
 
   }

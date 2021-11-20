@@ -8,12 +8,9 @@ import HomeContainer from "./home/HomeContainer";
 import ProfileContainer from '../../user/components/ProfileContainer';
 import DashboardContainer from './dashboard/DashboardContainer';
 import GameContainer from '../../game/components/GameBoardContainer';
+import WaitingRoomContainer from '../../game/components/WaitingRoom';
 
 const AppContainer = () => {
-
-  // if (isLoading) {
-  //   return <Loading/>;
-  // }
 
   return (
     <div className="app-container">
@@ -23,6 +20,7 @@ const AppContainer = () => {
         <Route path="/dashboard" component={DashboardContainer} />
         <Route path="/profile" component={ProfileContainer} />
         <Route path="/game/:gameId" component={GameContainer} />
+        <Route path="/game/lobby/:gameId" component={WaitingRoomContainer} />
       </Switch>
     </div>
   );
