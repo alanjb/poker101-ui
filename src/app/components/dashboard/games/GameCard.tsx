@@ -2,12 +2,27 @@ import React from 'react';
 import { Button, Card, CardBody, CardTitle } from 'reactstrap';
 import Game from '../../../../game/models/Game';
 import { useHistory } from "react-router-dom";
+import axios from 'axios';
 
 const GameCard = ({ game }: Props) => {
   const history = useHistory();
 
-  function goToGame() {
-    history.push(`/game/${game.id}`)
+  function addPlayer() {
+    // history.push(`/game/${game.id}`)
+    axios
+      .put(`http://localhost:8000/api/game/add-player`, {
+        params: {
+          gameId: '61948c149dd2b0b6a6d5c62f',
+          playerId: '61948bea9dd2b0b6a6d5c62c'
+        }
+      })
+    .then(res => {
+
+    })
+  .catch(error => {
+    // alert("Failed to get games \n\n" + error);
+  })
+
   }
 
   return (
@@ -20,7 +35,7 @@ const GameCard = ({ game }: Props) => {
               Players: {game.players}
             </div>
           </CardTitle>
-          <Button onClick={() => goToGame()}>
+          <Button onClick={() => addPlayer()}>
             Join Game
           </Button>
         </CardBody>

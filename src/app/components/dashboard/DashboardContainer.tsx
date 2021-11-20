@@ -1,18 +1,40 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import CreateGameModal from '../../../game/components/CreateGameModal';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Game from '../../../game/models/Game';
-import axios from 'axios';
 import GamesContainer from './games/GamesContainer';
+import axios from 'axios';
 
 const DashboardContainer = () => {
   const [isCreateGameModalOpen, toggleCreateGameModal] = useState(false);
+  const [gamesArray, setGames] = useState([]);
+
+  useEffect(() => {
+    init();
+  }, []); 
+
+  function init() {
+    axios
+      .get(`http://localhost:8000/api/game/games`)
+      .then(res => {
+        if(res.data){
+          const { games } = res.data;
+
+          setGames(games);
+        }
+      })
+    .catch(error => {
+      alert("Failed to get games \n\n" + error);
+    })
+  }
 
   function toggle() {
     toggleCreateGameModal(!isCreateGameModalOpen);
   };
 
   function gameCreated(game: Game) {
+    gamesArray.push(game);
+    setGames(gamesArray);
     toggle();
   }
 
@@ -35,7 +57,7 @@ const DashboardContainer = () => {
             </Row>
             <Row>
               <Col>
-                <GamesContainer/>
+                <GamesContainer games={gamesArray}/>
               </Col>
             </Row>
           </div>
