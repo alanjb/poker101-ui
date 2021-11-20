@@ -4,7 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 class Profile extends Component {
   render() {
     return (
-      <div className="component-container profile-container">
+      <div className="profile-container component-container ">
         <ProfileComponent/>
       </div>
     );
@@ -14,7 +14,7 @@ class Profile extends Component {
 const ProfileComponent = () => {
 
   return (
-    <Container className="component-container dashboard-header themed-container" fluid={true}>
+    <Container className="component-container themed-container" fluid={true}>
       <Row>
         <Col>
           <br />

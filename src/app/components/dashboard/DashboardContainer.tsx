@@ -40,8 +40,8 @@ const DashboardContainer = () => {
 
   return (
     <Fragment>
-      <div className="dashboard-container">
-        <Container className="component-container dashboard-header themed-container" fluid={true}>
+      <div className="dashboard-container component-container">
+        <Container className="dashboard-header themed-container" fluid={true}>
           <div className="content">
             <Row>
               <Col>

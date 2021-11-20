@@ -69,3 +69,12 @@ body {
         left: 35%;
     }
 }
+
+tbody, td, tfoot, th, thead, tr {
+    border-color: white;
+    color: white;
+}
+
+.start-game-button-container {
+    text-align: right;
+}
