@@ -1,8 +1,6 @@
 import React from "react";
 import { ErrorMessage, Field } from "formik";
-// @ts-ignore
 import TextField from "@material-ui/core/TextField";
-
 import "./FormikField.scss";
 
 interface FormikFieldProps {

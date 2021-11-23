@@ -3,7 +3,6 @@ import React from 'react';
 import { Modal, ModalBody, ModalHeader} from 'reactstrap';
 import { Formik, Form} from 'formik';
 import FormikField from "../../app/components/dashboard/FormikField";
-//@ts-ignore
 import Button from '@material-ui/core/Button';
 
 import * as Yup from 'yup';
