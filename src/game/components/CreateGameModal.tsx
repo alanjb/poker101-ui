@@ -1,59 +1,78 @@
 import axios from 'axios';
-import React, { Component } from 'react';
-import {Button, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
+import React from 'react';
+import { Modal, ModalBody, ModalHeader} from 'reactstrap';
+import { Formik, Form} from 'formik';
+import FormikField from "../../app/components/dashboard/FormikField";
+import Button from '@material-ui/core/Button';
+
+import * as Yup from 'yup';
 import Game from '../models/Game';
 
-class CreateGameModal extends Component<Props> {
+function CreateGameModal(props : Props) {
+    const { isOpen, toggle } = props;
 
-  render() {
-    const { isOpen, toggle } = this.props;
-    const { create } = this;
+    const create = (values : any) => {
+      const { created } = props;
+      const {ante, chips} = values;
+  
+      const newGame: Partial<Game> = {
+        requiredPointsPerPlayer: chips,
+        anteAmount: ante,
+      }
+    
+      axios
+        .post(`http://localhost:8000/api/game/create`, { game: newGame })
+        .then(res => {
+          if(res.data){
+            const { game } = res.data;
+  
+            created(game);
+          }
+        })
+        .catch(error => {
+          alert("Failed to create game \n\n" + error);
+        })
+    }
+
+    const CreateGameSchema = Yup.object().shape({
+      chips: Yup.number()
+        .min(0, 'Too Small!')
+        .required('Required'),
+   
+      ante: Yup.number()
+        .min(0, 'Too Small!')
+        .max(1000000, 'Too Big!')
+        .required('Required'),
+    });
 
     return (
-      <Modal size="lg" {...{ isOpen, toggle }}>
+        <Modal size="lg" {...{ isOpen, toggle }}>
         <ModalHeader>Create New Game</ModalHeader>
         <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label className="label-text" for="">Required chips per player</Label>
-              <Input type="email" name="email" id="exampleEmail" /><br/>
-            </FormGroup>
-            <FormGroup>
-              <Label className="label-text" for="">Ante</Label>
-              <Input type="text" name="" id="" /><br/>
-            </FormGroup>
-          </Form>
+        <Formik<any>
+          initialValues={{
+            chips: '',
+            ante: '',
+          }}
+        validationSchema={CreateGameSchema}
+        onSubmit={values => {
+          console.log(values); //remove in prod
+          create(values)
+        }}
+       >
+        {({ dirty, isValid } : any) => (
+        <Form>
+          <FormikField type="text" name="chips" label="Required chips per player" placeholder="$" required/>
+          <FormikField type="text" name="ante" label="Ante" placeholder="$" required />
+          <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Create</Button>
+          <Button color="secondary" variant="contained" onClick={toggle}>Cancel</Button>
+        </Form>
+        )}
+        </Formik>
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={create}>Create</Button>
-          <Button color="warning" onClick={toggle}>Cancel</Button>
-        </ModalFooter>
       </Modal>
     );
   }
-
-  create = () => {
-    const { created } = this.props;
-
-    const newGame: Partial<Game> = {
-      requiredPointsPerPlayer: 5000,
-      anteAmount: 250,
-    }
-  
-    axios
-      .post(`http://localhost:8000/api/game/create`, { game: newGame })
-      .then(res => {
-        if(res.data){
-          const { game } = res.data;
-
-          created(game);
-        }
-      })
-      .catch(error => {
-        alert("Failed to create game \n\n" + error);
-      })
-  }
-}
 
 export default CreateGameModal;
 
