@@ -12,8 +12,8 @@ const GameCard = ({ game }: Props) => {
     axios
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
-          gameId: '61948c149dd2b0b6a6d5c62f',
-          playerId: '61948bea9dd2b0b6a6d5c62c'
+          gameId: '619c788ed1b052730957a905',
+          playerId: '619c7ad050d1a1c176dd82fe'
         }
       })
       .then(res => {

@@ -74,10 +74,33 @@ function CreateGameModal(props : Props) {
     );
   }
 
-export default CreateGameModal;
+  create = () => {
+    const { created } = this.props;
+
+    const newGame: Partial<Game> = {
+      requiredPointsPerPlayer: 5000,
+      anteAmount: 250,
+    }
+  
+    axios
+      .post(`http://localhost:8000/api/game/create`, { game: newGame })
+      .then(res => {
+        if(res.data){
+          const { game } = res.data;
+
+          created(game);
+        }
+      })
+      .catch(error => {
+        alert("Failed to create game \n\n" + error);
+      })
+  }
+}
 
 type Props = {
   isOpen: boolean;
   toggle: () => void;
   created: (game: Game) => void;
 };
+
+export default CreateGameModal;

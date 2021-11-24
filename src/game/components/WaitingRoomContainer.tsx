@@ -17,12 +17,12 @@ class WaitingRoomContainer extends Component {
     axios
       .put(`http://localhost:8000/api/game/start`, {
         params: {
-          gameId: '61948c149dd2b0b6a6d5c62f', //get from url
+          gameId: '61986712d1788dc2bd6e494e', //get from url
         }
       })
       .then(res => {
         if(res.data){
-          const { games } = res.data; 
+          console.log(res.data); 
         }
       })
       .catch(error => {
