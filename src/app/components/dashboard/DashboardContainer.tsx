@@ -23,14 +23,14 @@ const DashboardContainer = () => {
           setGames(games);
         }
       })
-    .catch(error => {
-      alert("Failed to get games \n\n" + error);
-    })
+      .catch(error => {
+        alert("Failed to get games \n\n" + error);
+      })
   }
 
   function toggle() {
     toggleCreateGameModal(!isCreateGameModalOpen);
-  };
+  }
 
   function gameCreated(game: Game) {
     gamesArray.push(game);

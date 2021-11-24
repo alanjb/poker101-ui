@@ -6,4 +6,5 @@ export default interface Player {
   hand: Card[];
   isDealer: boolean;
   points: number;
+  isTurn: boolean;
 }

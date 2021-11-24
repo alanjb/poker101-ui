@@ -2,10 +2,12 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import Game from '../models/Game';
+import BetModal from './BetModal';
 
 class GameContainer extends Component<State> {
   state: State = {
-    game: null
+    game: null,
+    isBetModalOpen: false
   }
 
   componentDidMount() {
@@ -13,34 +15,45 @@ class GameContainer extends Component<State> {
   }
 
   init() {
-    // const id = this.props.match.params.id;
-    // const prevId = prevProps.match.params.id;
+    axios
+      .get(`http://localhost:8000/api/game/game`, {
+        params: {
+          gameId: '61986712d1788dc2bd6e494e', //get from url
+        }
+      })
+      .then(res => {
+        if (res.data) {
+          console.log(res.data);
 
-    //get this game through
-    // axios
-    // .get(`http://localhost:8000/api/player/deck/discard`, { })
-    // .then(game => {
-    //   this.setState({
-    //     game: game
-    //   })
-    // })
-    // .catch(error => {
-    //   alert("Error! Failed to discard cards: " + error);
-    // })
+          this.setState({
+            game: res.data.game
+          })
+        }
+      })
+      .catch(error => {
+        alert("Failed to get game \n\n" + error);
+      })
+  }
+
+  toggleBetModal = () => {
+    this.setState({
+      isBetModalOpen: !this.state.isBetModalOpen
+    });
   }
 
   render() {
-    const { game } = this.state;
-
-    console.log(game);
+    const { game, isBetModalOpen } = this.state;
 
     return (
       <Fragment>
         <div className="game-board-container">
+          Round {game && game.roundCount}
           <div className="chip-pot-container">
             <div className="pot-data">
-              Total Pot <br/><br/>
-              $200
+              <b>Round {game && game.roundCount}</b>
+                <br/><br/>
+              Total Pot: 
+              ${game && game.pot}
             </div>
           </div>
 
@@ -64,23 +77,23 @@ class GameContainer extends Component<State> {
             </div>
             <br /><br/>
             <div className="player-game-controls-container">
-              <Button variant="primary" onClick={this.bet}>
+              <Button className="game-button" color="primary" onClick={this.toggleBetModal}>
                 Bet
               </Button>
-              <Button variant="primary" onClick={this.check}>
+              <Button className="game-button" color="secondary" onClick={this.check}>
                 Check
               </Button>
-              <Button variant="primary" onClick={this.call}>
+              <Button className="game-button" color="dark" onClick={this.call}>
                 Call
               </Button>
-              <Button variant="primary" onClick={this.raise}>
+              <Button className="game-button" color="info" onClick={this.raise}>
                 Raise
               </Button>
-              <Button variant="primary" onClick={this.fold}>
-                Fold
-              </Button>
-              <Button variant="danger" onClick={this.discard}>
+              <Button className="game-button" color="warning" onClick={this.discard}>
                 Discard 
+              </Button>
+              <Button className="game-button" color="danger" onClick={this.fold}>
+                Fold
               </Button>
             </div>
             <br/>
@@ -89,8 +102,13 @@ class GameContainer extends Component<State> {
             </div>
           </div>
         </div>
+        <BetModal isOpen={isBetModalOpen} toggle={this.toggleBetModal} betted={this.onBet} />
       </Fragment>
     );
+  }
+
+  onBet = () => {
+    console.log('betted!')
   }
 
   bet = () => {
@@ -101,7 +119,7 @@ class GameContainer extends Component<State> {
     axios
       .put(`http://localhost:8000/api/game/check`, {
         params: {
-          gameId: '61948c149dd2b0b6a6d5c62f',
+          gameId: '61986712d1788dc2bd6e494e',
           playerId: 456
         }
       })
@@ -146,6 +164,7 @@ class GameContainer extends Component<State> {
 
 type State = {
   game: Game;
+  isBetModalOpen: boolean;
 }
 
 export default GameContainer;
