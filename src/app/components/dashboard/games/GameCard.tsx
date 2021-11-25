@@ -12,35 +12,43 @@ const GameCard = ({ game }: Props) => {
     axios
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
-          gameId: '619c788ed1b052730957a905',
-          playerId: '619c7ad050d1a1c176dd82fe'
+          gameId: game._id,
+          playerId: '619f0638d87a813884977683'
         }
       })
       .then(res => {
         setJoined(true);
-    })
-    .catch(error => {
-      alert("Error! Could not add player to this game \n\n" + error);
-    })
+      })
+      .catch(error => {
+        alert("Error! Could not add player to this game \n\n" + error);
+      })
   }
 
   function goToLobby() {
-    history.push('/lobby/' + game.id)
+    history.push('/lobby/' + game._id)
   }
 
   function leaveGame() {
     
   }
 
+  console.log(game.players)
+
   return (
     <div>
       <Card>
         <CardBody>
           <CardTitle tag="h5">
-            Game ID: {game.status}
+            Game ID: {game._id}
+            {game && game.players && (
             <div className="players">
-              Players: {game.players}
+                Players: {game.players.map(player => {
+                  return <p>{player.email}</p>
+                })}
             </div>
+            )
+            }
+
           </CardTitle>
           <div>
             {!joined && <Button onClick={() => addPlayer()}>

@@ -18,13 +18,11 @@ class GameContainer extends Component<State> {
     axios
       .get(`http://localhost:8000/api/game/game`, {
         params: {
-          gameId: '61986712d1788dc2bd6e494e', //get from url
+          gameId: '619d8b58424cb2d8763e017f', //get from url
         }
       })
       .then(res => {
         if (res.data) {
-          console.log(res.data);
-
           this.setState({
             game: res.data.game
           })
@@ -56,14 +54,14 @@ class GameContainer extends Component<State> {
               ${game && game.pot}
             </div>
           </div>
-
+          
           <div className="player-container opposing-player-container0 play"> 
             <div className="player-cards-container">
               {/* Render back of card for all the opposing players */}
             </div>
             <br/>
             <div className="player-username-container">
-              user0
+              
             </div>
           </div>
 
@@ -73,15 +71,16 @@ class GameContainer extends Component<State> {
             </div>
             <br/>
             <div className="player-username-container">
-              boyce.alan21
+
             </div>
-            <br /><br/>
+            <br /><br />
+            { /* wrap in isTurn conditional */}
             <div className="player-game-controls-container">
-              <Button className="game-button" color="primary" onClick={this.toggleBetModal}>
-                Bet
-              </Button>
               <Button className="game-button" color="secondary" onClick={this.check}>
                 Check
+              </Button>
+              <Button className="game-button" color="primary" onClick={this.toggleBetModal}>
+                Bet
               </Button>
               <Button className="game-button" color="dark" onClick={this.call}>
                 Call
@@ -98,7 +97,7 @@ class GameContainer extends Component<State> {
             </div>
             <br/>
             <div>
-              Your money: $50.00
+              Your money: $
             </div>
           </div>
         </div>
@@ -120,14 +119,13 @@ class GameContainer extends Component<State> {
       .put(`http://localhost:8000/api/game/check`, {
         params: {
           gameId: '61986712d1788dc2bd6e494e',
-          playerId: 456
         }
       })
       .then(game => {
-        
+        console.log(game)
       })
       .catch(error => {
-        alert("Error! Failed to discard cards: " + error);
+        alert("Error: Failed to check: " + error);
       })
   }
 
