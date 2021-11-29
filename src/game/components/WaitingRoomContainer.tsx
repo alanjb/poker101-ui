@@ -1,5 +1,6 @@
 import axios from 'axios';
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useState } from 'react';
+import { useHistory } from 'react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
 import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
 import dealerSvg from  '../../app/assets/icons/dice-5-fill.svg';
@@ -12,11 +13,13 @@ let users = [
             ];
 
 function WaitingRoomContainer(props) {
+  const gameId = props.match.params;
+  const history = useHistory();
 
   const start = () => {
+    //discuss security - check permissions on backend
 
-    //discuss security
-    const { gameId } = props.match.params;
+    console.log(gameId)
 
     axios
       .put(`http://localhost:8000/api/game/start`, {
@@ -25,12 +28,12 @@ function WaitingRoomContainer(props) {
         }
       })
       .then(res => {
-        if(res.data){
-          console.log(res.data); 
-        }
+        const gameId = res.data.game._id;
+
+        history.push('/game/' + gameId)
       })
       .catch(error => {
-        alert("Failed to get games \n\n" + error);
+        alert("Failed to start game \n\n" + error);
       })
   }
 

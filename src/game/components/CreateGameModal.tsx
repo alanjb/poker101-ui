@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import * as Yup from 'yup';
 import Game from '../models/Game';
 
-function CreateGameModal(props : Props) {
+function CreateGameModal(props: Props) {
     const { isOpen, toggle } = props;
 
     const create = (values : any) => {
@@ -20,7 +20,11 @@ function CreateGameModal(props : Props) {
       }
     
       axios
-        .post(`http://localhost:8000/api/game/create`, { game: newGame })
+        .post(`http://localhost:8000/api/game/create`,
+          {
+            game: newGame,
+            userId: '61a42772c7f78eb56fb85513'
+          })
         .then(res => {
           if(res.data){
             const { game } = res.data;
@@ -45,7 +49,7 @@ function CreateGameModal(props : Props) {
     });
 
     return (
-        <Modal size="lg" {...{ isOpen, toggle }}>
+      <Modal size="lg" {...{ isOpen, toggle }}>
         <ModalHeader>Create New Game</ModalHeader>
         <ModalBody>
         <Formik<any>
@@ -58,7 +62,7 @@ function CreateGameModal(props : Props) {
           create(values)
         }}
        >
-        {({ dirty, isValid } : any) => (
+        {({ dirty, isValid }: any) => (
         <Form>
           <FormikField type="text" name="chips" label="Required chips per player" placeholder="$" required/>
           <FormikField type="text" name="ante" label="Ante" placeholder="$" required />

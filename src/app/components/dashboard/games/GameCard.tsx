@@ -13,10 +13,10 @@ const GameCard = ({ game }: Props) => {
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
           gameId: game._id,
-          playerId: '619f0638d87a813884977683'
+          userId: '61a42794c7f78eb56fb85514'
         }
       })
-      .then(res => {
+      .then(() => {
         setJoined(true);
       })
       .catch(error => {
@@ -32,8 +32,6 @@ const GameCard = ({ game }: Props) => {
     
   }
 
-  console.log(game.players)
-
   return (
     <div>
       <Card>
@@ -46,8 +44,7 @@ const GameCard = ({ game }: Props) => {
                   return <p>{player.email}</p>
                 })}
             </div>
-            )
-            }
+            )}
 
           </CardTitle>
           <div>

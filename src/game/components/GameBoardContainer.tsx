@@ -1,124 +1,47 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import Game from '../models/Game';
 import BetModal from './BetModal';
 
-class GameContainer extends Component<State> {
-  state: State = {
-    game: null,
-    isBetModalOpen: false
-  }
+const GameBoardContainer = (props: Props) => {
+  const [isBetModalOpen, setBetModal] = useState(false);
+  const [user] = useState({ email: "test@gmail.com" });
+  const [player, setPlayer] = useState(null);
+  const [game, setGame] = useState(null);
+  const gameId = Object.values(props.match.params)[0];
 
-  componentDidMount() {
-    this.init();
-  }
+  useEffect(() => {
+    init();
+  }, []); 
 
-  init() {
-    axios
-      .get(`http://localhost:8000/api/game/game`, {
-        params: {
-          gameId: '619d8b58424cb2d8763e017f', //get from url
-        }
-      })
-      .then(res => {
-        if (res.data) {
-          this.setState({
-            game: res.data.game
-          })
-        }
-      })
-      .catch(error => {
-        alert("Failed to get game \n\n" + error);
-      })
-  }
-
-  toggleBetModal = () => {
-    this.setState({
-      isBetModalOpen: !this.state.isBetModalOpen
+  async function init() {
+    const res = await axios.get(`http://localhost:8000/api/game/game`, {
+      params: {
+        gameId: gameId, 
+      }
     });
-  }
 
-  render() {
-    const { game, isBetModalOpen } = this.state;
+    console.log(res.data.game)
 
-    return (
-      <Fragment>
-        <div className="game-board-container">
-          Round {game && game.roundCount}
-          <div className="chip-pot-container">
-            <div className="pot-data">
-              <b>Round {game && game.roundCount}</b>
-                <br/><br/>
-              Total Pot: 
-              ${game && game.pot}
-            </div>
-          </div>
-          
-          <div className="player-container opposing-player-container0 play"> 
-            <div className="player-cards-container">
-              {/* Render back of card for all the opposing players */}
-            </div>
-            <br/>
-            <div className="player-username-container">
-              
-            </div>
-          </div>
+    setGame(res.data.game);
 
-          <div className="player-container user-player-container"> 
-            <div className="player-cards-container">
-              {/* Get players cards and render based on card deck asset set */}
-            </div>
-            <br/>
-            <div className="player-username-container">
-
-            </div>
-            <br /><br />
-            { /* wrap in isTurn conditional */}
-            <div className="player-game-controls-container">
-              <Button className="game-button" color="secondary" onClick={this.check}>
-                Check
-              </Button>
-              <Button className="game-button" color="primary" onClick={this.toggleBetModal}>
-                Bet
-              </Button>
-              <Button className="game-button" color="dark" onClick={this.call}>
-                Call
-              </Button>
-              <Button className="game-button" color="info" onClick={this.raise}>
-                Raise
-              </Button>
-              <Button className="game-button" color="warning" onClick={this.discard}>
-                Discard 
-              </Button>
-              <Button className="game-button" color="danger" onClick={this.fold}>
-                Fold
-              </Button>
-            </div>
-            <br/>
-            <div>
-              Your money: $
-            </div>
-          </div>
-        </div>
-        <BetModal isOpen={isBetModalOpen} toggle={this.toggleBetModal} betted={this.onBet} />
-      </Fragment>
+    const player = res.data.game.players.find(player => 
+      player.email === user.email
     );
+
+    setPlayer(player);
   }
 
-  onBet = () => {
-    console.log('betted!')
+  const toggleBetModal = () => {
+
   }
 
-  bet = () => {
-    console.log('bet...')
-  }
-
-  check = () => {
+  const check = () => {
     axios
       .put(`http://localhost:8000/api/game/check`, {
         params: {
-          gameId: '61986712d1788dc2bd6e494e',
+          gameId: gameId,
         }
       })
       .then(game => {
@@ -129,40 +52,66 @@ class GameContainer extends Component<State> {
       })
   }
 
-  call = () => {
-    console.log('call...')
-  }
+  return (
+    <Fragment>
+      <div className="game-board-container">
+        <div className="chip-pot-container">
+          <div className="pot-data">
+            <b>Round {game && game.roundCount}</b>
+              <br/><br/>
+            Total Pot: 
+            ${game && game.pot}
+          </div>
+        </div>
 
-  raise = () => {
-    console.log('raise...')
-  }
-
-  fold = () => {
-    console.log('fold...')
-  }
-
-  discard = () => {
-    console.log('Discard selected cards...')
-
-    const selectedCardsToDiscard = [{ id: 123, face: 'Ace', suit: 'Spades'}];
-  
-    //get other settings - use a create new game modal 
-    axios
-      .delete(`http://localhost:8000/api/player/deck/discard`, {data: selectedCardsToDiscard})
-      .then(res => {
-        if(res.data){
-          console.log('Selected cards deleted...')
+        {player && 
+          <div className="player-container user-player-container"> 
+            <div className="player-cards-container">
+              {/* Get players cards and render based on card deck asset set */}
+            </div>
+            <br/>
+          
+          <div className="player-username-container">
+            {player.email}
+          </div>
+          <br/>
+          
+          <div className="player-game-controls-container">
+            <Button className="game-button" color="secondary" onClick={check} disabled={!player.isTurn}>
+              Check
+            </Button>
+            {/* <Button className="game-button" color="primary" onClick={this.toggleBetModal}>
+              Bet
+            </Button>
+            <Button className="game-button" color="dark" onClick={this.call}>
+              Call
+            </Button>
+            <Button className="game-button" color="info" onClick={this.raise}>
+              Raise
+            </Button>
+            <Button className="game-button" color="warning" onClick={this.discard}>
+              Discard 
+            </Button>
+            <Button className="game-button" color="danger" onClick={this.fold}>
+              Fold
+            </Button> */}
+          </div>
+          <br/>
+          <div>
+            Your money: ${player.points}
+          </div>
+        </div>
         }
-      })
-      .catch(error => {
-        alert("Error! Failed to discard cards: " + error);
-      })
-  }
+      </div>
+    </Fragment>
+  );
+
+
 }
 
-type State = {
-  game: Game;
-  isBetModalOpen: boolean;
-}
+type Props = {
+  game: Game,
+  match: any
+};
 
-export default GameContainer;
+export default GameBoardContainer;

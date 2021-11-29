@@ -20,6 +20,8 @@ const DashboardContainer = () => {
         if(res.data){
           const { games } = res.data;
 
+          console.log(games)
+
           setGames(games);
         }
       })
