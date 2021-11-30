@@ -5,7 +5,7 @@ import Game from '../models/Game';
 import BetModal from './BetModal';
 import RaiseModal from './RaiseModal';
 
-const GameBoardContainer = (props: Props) => {
+const GameBoardContainer = (props) => {
   const [isBetModalOpen, setBetModal] = useState(false);
   const [isRaiseModalOpen, setRaiseModal] = useState(false);
   const [user] = useState({ email: "bill@gmail.com" });
@@ -142,8 +142,8 @@ const GameBoardContainer = (props: Props) => {
           </div>
         }
       </div>
-      <BetModal isOpen={isBetModalOpen} toggle={toggleBetModal} betted={betted} />
-      <RaiseModal isOpen={isBetModalOpen} toggle={toggleBetModal} raised={raised} />
+      <BetModal isOpen={isBetModalOpen} toggle={toggleBetModal} betted={betted} game={game}/>
+      <RaiseModal isOpen={isBetModalOpen} toggle={toggleBetModal} raised={raised} game={game}/>
     </Fragment>
   );
 }

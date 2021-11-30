@@ -7,9 +7,8 @@ import Button from '@material-ui/core/Button';
 import * as Yup from 'yup';
 import Game from '../models/Game';
 
-function RaiseModal(props) {
-  const { isOpen, toggle } = props;
-  const gameId = props.match.params;
+function RaiseModal(props: Props) {
+  const { isOpen, toggle, game } = props;
 
     const raise = (values: any) => {
       const { raised } = props;
@@ -18,7 +17,7 @@ function RaiseModal(props) {
       axios
         .post(`http://localhost:8000/api/game/raise`,
           {
-            gameId: gameId,
+            gameId: game._id,
             raise: raise
           })
         .then(res => {
@@ -66,7 +65,8 @@ function RaiseModal(props) {
 type Props = {
   isOpen: boolean;
   toggle: () => void;
-  betted: (game: Game) => void;
+  raised: (game: Game) => void;
+  game: Game;
 };
 
 export default RaiseModal;

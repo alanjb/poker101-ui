@@ -8,14 +8,17 @@ const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
   const history = useHistory();
   const [user] = useState({ email: "jim@gmail.com" });
+  const [players, setPlayers] = useState([]);
 
   useEffect(() => {
+    setPlayers(game.players);
+
     game.players.forEach(player => {
       if (player.email === user.email) {
         setJoined(true);
       }
     })
-  }, []); 
+  }, [game.players, user.email]); 
 
   //don't allow dup players
   function addPlayer() {
@@ -26,8 +29,9 @@ const GameCard = ({ game }) => {
           userId: '61a565bc5073df63ea2530f1'
         }
       })
-      .then(() => {
+      .then(res => {
         setJoined(true);
+        setPlayers(res.data.game.players)
       })
       .catch(error => {
         alert("Error! Could not add player to this game \n\n" + error);
@@ -35,7 +39,7 @@ const GameCard = ({ game }) => {
   }
 
   function goToLobby() {
-    history.push('/lobby/' + game._id)
+    history.push('/lobby/'+game._id)
   }
 
   function leaveGame() {
@@ -50,12 +54,11 @@ const GameCard = ({ game }) => {
             Game ID: {game._id}
             {game && game.players && (
             <div className="players">
-                Players: {game.players.map(player => {
-                  return <span>   {player.email}   </span>
+                Players: {players.map((player,i) => {
+                  return <span key={i}> {player.email}{i+1 < players.length && ','} </span>
                 })}
             </div>
             )}
-
           </CardTitle>
           <div>
             {(!joined && game.status === 'starting') && <Button onClick={() => addPlayer()}>

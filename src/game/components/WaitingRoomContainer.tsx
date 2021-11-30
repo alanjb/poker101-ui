@@ -4,12 +4,13 @@ import { useHistory } from 'react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
 import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
 import dealerSvg from  '../../app/assets/icons/dice-5-fill.svg';
-import waitSvg from '../../app/assets/icons/hourglass-split.svg';
 
 function WaitingRoomContainer(props) {
   const gameId = Object.values(props.match.params)[0];
   const history = useHistory();
   const [players, setPlayers] = useState([]);
+  const [user] = useState({ email: "alan@gmail.com" });
+  const [player, setPlayer] = useState(null);
 
   useEffect(() => {
     async function init() {
@@ -18,11 +19,16 @@ function WaitingRoomContainer(props) {
           gameId: gameId, 
         }
       });
-      
       setPlayers(res.data.game.players);
+      res.data.game.players.forEach(player => {
+        if (player.email === user.email) {
+          setPlayer(player);
+          return;
+        }
+      });
     }
     init();
-  }, []); 
+  }, [gameId]); 
 
   const start = () => {
     //discuss security - check permissions on backend
@@ -52,10 +58,12 @@ function WaitingRoomContainer(props) {
               <h3 className="text-light">Waiting Room</h3>
               </Col>
               <Col>
-              <div className="start-game-button-container justify-content-end">
-                <Button className="align-self-end" color="info" onClick={start}>
-                  Start game
-                </Button>
+                <div className="start-game-button-container justify-content-end">
+                  {player && player.isDealer && 
+                    <Button className="align-self-end" color="info" onClick={start}>
+                      Start game
+                    </Button>
+                  }
               </div>
             </Col>
           </Row>
@@ -75,7 +83,7 @@ function WaitingRoomContainer(props) {
                 <td>{`${user.email} `}
                     {user.isDealer === true && <img alt='dealer' title="user is dealer" className='icon' src={dealerSvg}></img>}
                 </td>
-                <td> {user.isReady ? <img alt='check' className='icon' title="user is ready to play" src={checkSvg}></img> : <img alt='wait' title="user waiting to be added" className='icon' src={waitSvg}></img>}</td>
+                <td> {<img alt='check' className='icon' title="user is ready to play" src={checkSvg}></img>}</td>
               </tr>)}
           </tbody>
         </table>
