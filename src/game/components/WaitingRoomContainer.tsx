@@ -1,26 +1,31 @@
 import axios from 'axios';
-import React, { Component, Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
 import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
 import dealerSvg from  '../../app/assets/icons/dice-5-fill.svg';
 import waitSvg from '../../app/assets/icons/hourglass-split.svg';
 
-let users = [
-             {handle: '@Alan', isDealer: 'true', isReady: true}, 
-             {handle: '@Matt', isDealer: 'false', isReady: false}, 
-             {handle: '@Obeyd', isDealer: 'false', isReady: true}
-            ];
-
 function WaitingRoomContainer(props) {
-  const gameId = props.match.params;
+  const gameId = Object.values(props.match.params)[0];
   const history = useHistory();
+  const [players, setPlayers] = useState([]);
+
+  useEffect(() => {
+    async function init() {
+      const res = await axios.get(`http://localhost:8000/api/game/game`, {
+        params: {
+          gameId: gameId, 
+        }
+      });
+      
+      setPlayers(res.data.game.players);
+    }
+    init();
+  }, []); 
 
   const start = () => {
     //discuss security - check permissions on backend
-
-    console.log(gameId)
-
     axios
       .put(`http://localhost:8000/api/game/start`, {
         params: {
@@ -64,13 +69,13 @@ function WaitingRoomContainer(props) {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => 
-              <tr>
+            {players && players.map((user, index) =>
+              <tr key={index}>
                 <th scope="row">{index+1}</th>
-                <td>{`${user.handle} `}
-                    {user.isDealer === 'true' && <img alt='dealer' title="user is dealer" className='icon' src={dealerSvg}></img>}
+                <td>{`${user.email} `}
+                    {user.isDealer === true && <img alt='dealer' title="user is dealer" className='icon' src={dealerSvg}></img>}
                 </td>
-                <td> {user.isReady ? <img alt='check' className='icon' title="user is ready to play" src={checkSvg}></img> : <img alt='wait' title="user waiting to be added"  className='icon'  src={waitSvg}></img>}</td>
+                <td> {user.isReady ? <img alt='check' className='icon' title="user is ready to play" src={checkSvg}></img> : <img alt='wait' title="user waiting to be added" className='icon' src={waitSvg}></img>}</td>
               </tr>)}
           </tbody>
         </table>

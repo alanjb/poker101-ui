@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import CreateGameModal from '../../../game/components/CreateGameModal';
+import CreateGameModal from './games/CreateGameModal';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Game from '../../../game/models/Game';
 import GamesContainer from './games/GamesContainer';
@@ -17,13 +17,9 @@ const DashboardContainer = () => {
     axios
       .get(`http://localhost:8000/api/game/games`)
       .then(res => {
-        if(res.data){
-          const { games } = res.data;
+        const { games } = res.data;
 
-          console.log(games)
-
-          setGames(games);
-        }
+        setGames(games);
       })
       .catch(error => {
         alert("Failed to get games \n\n" + error);

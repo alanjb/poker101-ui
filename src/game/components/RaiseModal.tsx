@@ -7,24 +7,24 @@ import Button from '@material-ui/core/Button';
 import * as Yup from 'yup';
 import Game from '../models/Game';
 
-function BetModal(props) {
+function RaiseModal(props) {
   const { isOpen, toggle } = props;
   const gameId = props.match.params;
 
-    const bet = (values: any) => {
-      const { betted } = props;
-      const {bet} = values;
+    const raise = (values: any) => {
+      const { raised } = props;
+      const {raise} = values;
     
       axios
-        .post(`http://localhost:8000/api/game/bet`,
+        .post(`http://localhost:8000/api/game/raise`,
           {
             gameId: gameId,
-            bet: bet
+            raise: raise
           })
         .then(res => {
           const { game } = res.data;
 
-          betted(game);
+          raised(game);
         })
         .catch(error => {
           alert("Failed to create game \n\n" + error);
@@ -32,28 +32,28 @@ function BetModal(props) {
     }
 
     const CreateGameSchema = Yup.object().shape({
-      bet: Yup.number()
+      raise: Yup.number()
         .min(0, 'Too Small!')
         .required('Required'),
     });
 
     return (
       <Modal size="lg" {...{ isOpen, toggle }}>
-        <ModalHeader>Enter the amount to bet</ModalHeader>
+        <ModalHeader>Enter the amount to raise</ModalHeader>
         <ModalBody>
         <Formik<any>
           initialValues={{
-            bet: '',
+            raise: '',
           }}
         validationSchema={CreateGameSchema}
         onSubmit={values => {
-          bet(values)
+          raise(values)
         }}
        >
         {({ dirty, isValid }: any) => (
         <Form>
-          <FormikField type="text" name="bet" label="Bet amount" placeholder="$" required/>
-          <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Bet</Button>
+          <FormikField type="text" name="raise" label="Raise amount" placeholder="$" required/>
+          <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Raise</Button>
           <Button color="secondary" variant="contained" onClick={toggle}>Cancel</Button>
         </Form>
         )}
@@ -69,4 +69,4 @@ type Props = {
   betted: (game: Game) => void;
 };
 
-export default BetModal;
+export default RaiseModal;

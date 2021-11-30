@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, CardTitle } from 'reactstrap';
 import Game from '../../../../game/models/Game';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
-const GameCard = ({ game }: Props) => {
+const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
   const history = useHistory();
+  const [user] = useState({ email: "jim@gmail.com" });
 
+  useEffect(() => {
+    game.players.forEach(player => {
+      if (player.email === user.email) {
+        setJoined(true);
+      }
+    })
+  }, []); 
+
+  //don't allow dup players
   function addPlayer() {
     axios
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
           gameId: game._id,
-          userId: '61a42794c7f78eb56fb85514'
+          userId: '61a565bc5073df63ea2530f1'
         }
       })
       .then(() => {
@@ -36,19 +46,19 @@ const GameCard = ({ game }: Props) => {
     <div>
       <Card>
         <CardBody>
-          <CardTitle tag="h5">
+          <CardTitle>
             Game ID: {game._id}
             {game && game.players && (
             <div className="players">
                 Players: {game.players.map(player => {
-                  return <p>{player.email}</p>
+                  return <span>   {player.email}   </span>
                 })}
             </div>
             )}
 
           </CardTitle>
           <div>
-            {!joined && <Button onClick={() => addPlayer()}>
+            {(!joined && game.status === 'starting') && <Button onClick={() => addPlayer()}>
               Join Game
             </Button>
             }

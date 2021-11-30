@@ -12,6 +12,27 @@ class GamesContainer extends Component<Props> {
             return game.status === 'starting' && <GameCard key={i} game={game}/>
           })}
         </div>
+
+        <div className="games-status-container in-progress-games-container">
+          <h5 className="container-subtitle">In Progress</h5>
+          {this.props.games.map((game, i) => {
+            return game.status === 'in progress' && <GameCard key={i} game={game}/>
+          })}
+        </div>
+
+        <div className="games-status-container complete-games-container">
+          <h5 className="container-subtitle">Complete</h5>
+          {this.props.games.map((game, i) => {
+            return game.status === 'complete' && <GameCard key={i} game={game}/>
+          })}
+        </div>
+
+        <div className="games-status-container aborted-games-container">
+          <h5 className="container-subtitle">Aborted</h5>
+          {this.props.games.map((game, i) => {
+            return game.status === 'aborted' && <GameCard key={i} game={game}/>
+          })}
+        </div>
       </div>
     );
   }
