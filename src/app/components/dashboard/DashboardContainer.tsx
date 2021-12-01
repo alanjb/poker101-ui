@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import CreateGameModal from './games/CreateGameModal';
+import CreateGameModal from '../../../game/components/CreateGameModal';
 import { Button, Col, Container, Row } from 'reactstrap';
 import Game from '../../../game/models/Game';
-import GamesContainer from './games/GamesContainer';
+import GamesContainer from '../../../game/components/GamesContainer';
 import axios from 'axios';
 
 const DashboardContainer = () => {

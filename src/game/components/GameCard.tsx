@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, CardTitle } from 'reactstrap';
-import Game from '../../../../game/models/Game';
+import Game from '../models/Game';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
 const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
   const history = useHistory();
-  const [user] = useState({ email: "jim@gmail.com" });
+  const [user] = useState({ email: "timmy@gmail.com" });
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const GameCard = ({ game }) => {
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
           gameId: game._id,
-          userId: '61a565bc5073df63ea2530f1'
+          userId: '61a684635073df63ea253193'
         }
       })
       .then(res => {

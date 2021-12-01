@@ -2,10 +2,10 @@ import axios from 'axios';
 import React from 'react';
 import { Modal, ModalBody, ModalHeader} from 'reactstrap';
 import { Formik, Form} from 'formik';
-import FormikField from "../FormikField";
+import FormikField from "../../app/components/dashboard/FormikField";
 import Button from '@material-ui/core/Button';
 import * as Yup from 'yup';
-import Game from '../../../../game/models/Game';
+import Game from '../models/Game';
 
 function CreateGameModal(props: Props) {
   const { isOpen, toggle } = props;
@@ -23,7 +23,7 @@ function CreateGameModal(props: Props) {
       .post(`http://localhost:8000/api/game/create`,
         {
           game: newGame,
-          userId: '61a565a45073df63ea2530f0'
+          userId: '61a683f15073df63ea253191'
         })
       .then(res => {
         if (res.data) {

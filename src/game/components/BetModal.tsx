@@ -12,10 +12,12 @@ function BetModal(props: Props) {
 
     const bet = (values: any) => {
       const { betted } = props;
-      const {bet} = values;
+      const { bet } = values;
+      
+      console.log('bet', bet)
     
       axios
-        .post(`http://localhost:8000/api/game/bet`,
+        .put(`http://localhost:8000/api/game/bet`,
           {
             gameId: game._id,
             bet: bet
@@ -23,7 +25,14 @@ function BetModal(props: Props) {
         .then(res => {
           const { game } = res.data;
 
-          betted(game);
+          if (res.data.is_error === true) {
+            toggle();
+            alert('Error: Player does not have enough money')
+          }
+          else {
+            toggle();
+            betted(game);
+          }
         })
         .catch(error => {
           alert("Failed to create game \n\n" + error);

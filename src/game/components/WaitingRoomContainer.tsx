@@ -19,7 +19,9 @@ function WaitingRoomContainer(props) {
           gameId: gameId, 
         }
       });
+
       setPlayers(res.data.game.players);
+
       res.data.game.players.forEach(player => {
         if (player.email === user.email) {
           setPlayer(player);
@@ -28,7 +30,7 @@ function WaitingRoomContainer(props) {
       });
     }
     init();
-  }, [gameId]); 
+  }, [gameId, user.email]); 
 
   const start = () => {
     //discuss security - check permissions on backend

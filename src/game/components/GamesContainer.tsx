@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Game from '../../../../game/models/Game';
-import GameCard from '../games/GameCard';
+import Game from '../models/Game';
+import GameCard from './GameCard';
 
 class GamesContainer extends Component<Props> {
   render() {

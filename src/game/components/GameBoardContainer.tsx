@@ -5,10 +5,10 @@ import Game from '../models/Game';
 import BetModal from './BetModal';
 import RaiseModal from './RaiseModal';
 
-const GameBoardContainer = (props) => {
+const GameBoardContainer = (props: Props) => {
   const [isBetModalOpen, setBetModal] = useState(false);
   const [isRaiseModalOpen, setRaiseModal] = useState(false);
-  const [user] = useState({ email: "bill@gmail.com" });
+  const [user] = useState({ email: "tim@gmail.com" });
   const [player, setPlayer] = useState(null);
   const [game, setGame] = useState(null);
   const gameId = Object.values(props.match.params)[0];
@@ -41,7 +41,7 @@ const GameBoardContainer = (props) => {
   }
 
   const betted = () => {
-    console.log('betted')
+    console.log('bet complete')
   }
 
   const check = () => {
@@ -108,23 +108,23 @@ const GameBoardContainer = (props) => {
             <br/> <br/>
           
             <div className="player-game-controls-container">
-              <Button className="game-button" color="secondary" onClick={check} disabled={!player.isTurn && (game.bet === 0) }>
+              <Button className="game-button" color="secondary" onClick={check} disabled={!player.isTurn}>
                 Check
               </Button>
 
-              <Button className="game-button" color="primary" onClick={toggleBetModal} disabled={!player.isTurn  && (game.bet === 0)}>
+              <Button className="game-button" color="primary" onClick={toggleBetModal} disabled={!player.isTurn}>
                 Bet
               </Button>
 
-              <Button className="game-button" color="dark" onClick={call} disabled={!player.isTurn && !(game.bet === 0)}>
+              <Button className="game-button" color="dark" onClick={call} disabled={!player.isTurn}>
                 Call
               </Button>
     
-              <Button className="game-button" color="info" onClick={toggleRaiseModal} disabled={!player.isTurn && !(game.bet === 0)}>
+              <Button className="game-button" color="info" onClick={toggleRaiseModal} disabled={!player.isTurn}>
                 Raise
               </Button>
             
-              <Button className="game-button" color="warning" onClick={discard} disabled={!player.isTurn && !(game.bet === 0)}>
+              <Button className="game-button" color="warning" onClick={discard} disabled={!player.isTurn}>
                 Discard 
               </Button>
             
@@ -135,7 +135,7 @@ const GameBoardContainer = (props) => {
             <br/>
             <div>
               <div className="player-username-container">
-                {player.email} <br/>  <br/> 
+                {player.email} <br/> <br/> 
                 ${player.points}
               </div>
             </div>
@@ -143,7 +143,7 @@ const GameBoardContainer = (props) => {
         }
       </div>
       <BetModal isOpen={isBetModalOpen} toggle={toggleBetModal} betted={betted} game={game}/>
-      <RaiseModal isOpen={isBetModalOpen} toggle={toggleBetModal} raised={raised} game={game}/>
+      <RaiseModal isOpen={isRaiseModalOpen} toggle={toggleRaiseModal} raised={raised} game={game}/>
     </Fragment>
   );
 }
