@@ -1,168 +1,156 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import Game from '../models/Game';
 import BetModal from './BetModal';
+import RaiseModal from './RaiseModal';
 
-class GameContainer extends Component<State> {
-  state: State = {
-    game: null,
-    isBetModalOpen: false
-  }
+const GameBoardContainer = (props: Props) => {
+  const [isBetModalOpen, setBetModal] = useState(false);
+  const [isRaiseModalOpen, setRaiseModal] = useState(false);
+  const [user] = useState({ email: "tim@gmail.com" });
+  const [player, setPlayer] = useState(null);
+  const [game, setGame] = useState(null);
+  const gameId = Object.values(props.match.params)[0];
 
-  componentDidMount() {
-    this.init();
-  }
-
-  init() {
-    axios
-      .get(`http://localhost:8000/api/game/game`, {
+  useEffect(() => {
+    async function init() {
+      const res = await axios.get(`http://localhost:8000/api/game/game`, {
         params: {
-          gameId: '619d8b58424cb2d8763e017f', //get from url
+          gameId: gameId, 
         }
-      })
-      .then(res => {
-        if (res.data) {
-          this.setState({
-            game: res.data.game
-          })
-        }
-      })
-      .catch(error => {
-        alert("Failed to get game \n\n" + error);
-      })
+      });
+    
+      setGame(res.data.game);
+  
+      const player = res.data.game.players.find(player => 
+        player.email === user.email
+      );
+  
+      setPlayer(player);
+    }
+    init();
+  }, [gameId, user.email]); 
+
+  const toggleBetModal = () => {
+    setBetModal(!isBetModalOpen);
   }
 
-  toggleBetModal = () => {
-    this.setState({
-      isBetModalOpen: !this.state.isBetModalOpen
-    });
+  const toggleRaiseModal = () => {
+    setRaiseModal(!isRaiseModalOpen);
   }
 
-  render() {
-    const { game, isBetModalOpen } = this.state;
-
-    return (
-      <Fragment>
-        <div className="game-board-container">
-          Round {game && game.roundCount}
-          <div className="chip-pot-container">
-            <div className="pot-data">
-              <b>Round {game && game.roundCount}</b>
-                <br/><br/>
-              Total Pot: 
-              ${game && game.pot}
-            </div>
-          </div>
-          
-          <div className="player-container opposing-player-container0 play"> 
-            <div className="player-cards-container">
-              {/* Render back of card for all the opposing players */}
-            </div>
-            <br/>
-            <div className="player-username-container">
-              
-            </div>
-          </div>
-
-          <div className="player-container user-player-container"> 
-            <div className="player-cards-container">
-              {/* Get players cards and render based on card deck asset set */}
-            </div>
-            <br/>
-            <div className="player-username-container">
-
-            </div>
-            <br /><br />
-            { /* wrap in isTurn conditional */}
-            <div className="player-game-controls-container">
-              <Button className="game-button" color="secondary" onClick={this.check}>
-                Check
-              </Button>
-              <Button className="game-button" color="primary" onClick={this.toggleBetModal}>
-                Bet
-              </Button>
-              <Button className="game-button" color="dark" onClick={this.call}>
-                Call
-              </Button>
-              <Button className="game-button" color="info" onClick={this.raise}>
-                Raise
-              </Button>
-              <Button className="game-button" color="warning" onClick={this.discard}>
-                Discard 
-              </Button>
-              <Button className="game-button" color="danger" onClick={this.fold}>
-                Fold
-              </Button>
-            </div>
-            <br/>
-            <div>
-              Your money: $
-            </div>
-          </div>
-        </div>
-        <BetModal isOpen={isBetModalOpen} toggle={this.toggleBetModal} betted={this.onBet} />
-      </Fragment>
-    );
+  const betted = () => {
+    console.log('bet complete')
   }
 
-  onBet = () => {
-    console.log('betted!')
-  }
-
-  bet = () => {
-    console.log('bet...')
-  }
-
-  check = () => {
+  const check = () => {
     axios
       .put(`http://localhost:8000/api/game/check`, {
         params: {
-          gameId: '61986712d1788dc2bd6e494e',
+          gameId: gameId,
         }
       })
       .then(game => {
-        console.log(game)
+        alert(player.email + ' has checked');
+        setGame(game);
       })
       .catch(error => {
         alert("Error: Failed to check: " + error);
       })
   }
 
-  call = () => {
-    console.log('call...')
-  }
-
-  raise = () => {
-    console.log('raise...')
-  }
-
-  fold = () => {
-    console.log('fold...')
-  }
-
-  discard = () => {
-    console.log('Discard selected cards...')
-
-    const selectedCardsToDiscard = [{ id: 123, face: 'Ace', suit: 'Spades'}];
-  
-    //get other settings - use a create new game modal 
+  const call = () => {
     axios
-      .delete(`http://localhost:8000/api/player/deck/discard`, {data: selectedCardsToDiscard})
-      .then(res => {
-        if(res.data){
-          console.log('Selected cards deleted...')
+      .put(`http://localhost:8000/api/game/call`, {
+        params: {
+          gameId: gameId,
         }
       })
+      .then(game => {
+        alert(player.email + ' has called');
+        console.log(game)
+      })
       .catch(error => {
-        alert("Error! Failed to discard cards: " + error);
+        alert("Error: Failed to call: " + error);
       })
   }
+
+  const raised = () => {
+    console.log('raised')
+  }
+
+  const discard = () => {
+    
+  }
+
+  const fold = () => {
+
+  }
+
+  return (
+    <Fragment>
+      <div className="game-board-container">
+        <div className="chip-pot-container">
+          <div className="pot-data">
+            <b>Round {game && game.roundCount}</b>
+              <br/><br/>
+            Total Pot: 
+            ${game && game.pot}
+          </div>
+        </div>
+
+        {game && player && 
+          <div className="player-container user-player-container"> 
+            <div className="player-cards-container">
+              {/* Get players cards and render based on card deck asset set */}
+            </div>
+            <br/> <br/>
+          
+            <div className="player-game-controls-container">
+              <Button className="game-button" color="secondary" onClick={check} disabled={!player.isTurn}>
+                Check
+              </Button>
+
+              <Button className="game-button" color="primary" onClick={toggleBetModal} disabled={!player.isTurn}>
+                Bet
+              </Button>
+
+              <Button className="game-button" color="dark" onClick={call} disabled={!player.isTurn}>
+                Call
+              </Button>
+    
+              <Button className="game-button" color="info" onClick={toggleRaiseModal} disabled={!player.isTurn}>
+                Raise
+              </Button>
+            
+              <Button className="game-button" color="warning" onClick={discard} disabled={!player.isTurn}>
+                Discard 
+              </Button>
+            
+              <Button className="game-button" color="danger" onClick={fold} disabled={!player.isTurn}>
+                Fold
+              </Button>
+            </div>
+            <br/>
+            <div>
+              <div className="player-username-container">
+                {player.email} <br/> <br/> 
+                ${player.points}
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      <BetModal isOpen={isBetModalOpen} toggle={toggleBetModal} betted={betted} game={game}/>
+      <RaiseModal isOpen={isRaiseModalOpen} toggle={toggleRaiseModal} raised={raised} game={game}/>
+    </Fragment>
+  );
 }
 
-type State = {
-  game: Game;
-  isBetModalOpen: boolean;
-}
+type Props = {
+  game: Game,
+  match: any
+};
 
-export default GameContainer;
+export default GameBoardContainer;

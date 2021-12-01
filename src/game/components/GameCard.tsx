@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, CardTitle } from 'reactstrap';
-import Game from '../../../../game/models/Game';
+import Game from '../models/Game';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 
-const GameCard = ({ game }: Props) => {
+const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
   const history = useHistory();
+  const [user] = useState({ email: "timmy@gmail.com" });
+  const [players, setPlayers] = useState([]);
 
+  useEffect(() => {
+    setPlayers(game.players);
+
+    game.players.forEach(player => {
+      if (player.email === user.email) {
+        setJoined(true);
+      }
+    })
+  }, [game.players, user.email]); 
+
+  //don't allow dup players
   function addPlayer() {
     axios
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
           gameId: game._id,
-          playerId: '619f0638d87a813884977683'
+          userId: '61a684635073df63ea253193'
         }
       })
       .then(res => {
         setJoined(true);
+        setPlayers(res.data.game.players)
       })
       .catch(error => {
         alert("Error! Could not add player to this game \n\n" + error);
@@ -25,33 +39,29 @@ const GameCard = ({ game }: Props) => {
   }
 
   function goToLobby() {
-    history.push('/lobby/' + game._id)
+    history.push('/lobby/'+game._id)
   }
 
   function leaveGame() {
     
   }
 
-  console.log(game.players)
-
   return (
     <div>
       <Card>
         <CardBody>
-          <CardTitle tag="h5">
+          <CardTitle>
             Game ID: {game._id}
             {game && game.players && (
             <div className="players">
-                Players: {game.players.map(player => {
-                  return <p>{player.email}</p>
+                Players: {players.map((player,i) => {
+                  return <span key={i}> {player.email}{i+1 < players.length && ','} </span>
                 })}
             </div>
-            )
-            }
-
+            )}
           </CardTitle>
           <div>
-            {!joined && <Button onClick={() => addPlayer()}>
+            {(!joined && game.status === 'starting') && <Button onClick={() => addPlayer()}>
               Join Game
             </Button>
             }

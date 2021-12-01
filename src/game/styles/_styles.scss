@@ -22,13 +22,12 @@ body {
     .chip-pot-container {
         text-align: center;
         position: fixed;
-        left: 50%;
-        top: 50%;
+        left: 45%;
+        top: 45%;
     }
 
     .player-container {
         text-align: center;
-        position: absolute;
 
         .player-cards-container {
             .backOfCard {
@@ -65,8 +64,8 @@ body {
     }
 
     .user-player-container {
-        bottom: 10%;
-        left: 35%;
+        top: 75%;
+        position: relative;
     }
 }
 

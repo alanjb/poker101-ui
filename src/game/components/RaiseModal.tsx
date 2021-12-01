@@ -7,32 +7,23 @@ import Button from '@material-ui/core/Button';
 import * as Yup from 'yup';
 import Game from '../models/Game';
 
-function BetModal(props: Props) {
+function RaiseModal(props: Props) {
   const { isOpen, toggle, game } = props;
 
-    const bet = (values: any) => {
-      const { betted } = props;
-      const { bet } = values;
-      
-      console.log('bet', bet)
+    const raise = (values: any) => {
+      const { raised } = props;
+      const {raise} = values;
     
       axios
-        .put(`http://localhost:8000/api/game/bet`,
+        .post(`http://localhost:8000/api/game/raise`,
           {
             gameId: game._id,
-            bet: bet
+            raise: raise
           })
         .then(res => {
           const { game } = res.data;
 
-          if (res.data.is_error === true) {
-            toggle();
-            alert('Error: Player does not have enough money')
-          }
-          else {
-            toggle();
-            betted(game);
-          }
+          raised(game);
         })
         .catch(error => {
           alert("Failed to create game \n\n" + error);
@@ -40,28 +31,28 @@ function BetModal(props: Props) {
     }
 
     const CreateGameSchema = Yup.object().shape({
-      bet: Yup.number()
+      raise: Yup.number()
         .min(0, 'Too Small!')
         .required('Required'),
     });
 
     return (
       <Modal size="lg" {...{ isOpen, toggle }}>
-        <ModalHeader>Enter the amount to bet</ModalHeader>
+        <ModalHeader>Enter the amount to raise</ModalHeader>
         <ModalBody>
         <Formik<any>
           initialValues={{
-            bet: '',
+            raise: '',
           }}
         validationSchema={CreateGameSchema}
         onSubmit={values => {
-          bet(values)
+          raise(values)
         }}
        >
         {({ dirty, isValid }: any) => (
         <Form>
-          <FormikField type="text" name="bet" label="Bet amount" placeholder="$" required/>
-          <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Bet</Button>
+          <FormikField type="text" name="raise" label="Raise amount" placeholder="$" required/>
+          <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Raise</Button>
           <Button color="secondary" variant="contained" onClick={toggle}>Cancel</Button>
         </Form>
         )}
@@ -74,8 +65,8 @@ function BetModal(props: Props) {
 type Props = {
   isOpen: boolean;
   toggle: () => void;
-  betted: (game: Game) => void;
+  raised: (game: Game) => void;
   game: Game;
 };
 
-export default BetModal;
+export default RaiseModal;

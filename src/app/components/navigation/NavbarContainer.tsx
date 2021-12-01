@@ -6,7 +6,7 @@ const NavBarContainer = () => {
   return (
     <div className="navigation-container">
       <div className="logo">
-        Poker 101
+        Poker101
       </div>
       <MainNav />
     </div>

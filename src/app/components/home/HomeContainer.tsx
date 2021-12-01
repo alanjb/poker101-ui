@@ -8,7 +8,7 @@ const HomeContainer = () => (
       <Container className="home-header themed-container" fluid={true}>
         <Row>
           <Col>
-            <h2 className="header-text text-center ">Welcome to Poker 101</h2>
+            <h2 className="header-text text-center ">Welcome to Poker101</h2>
           </Col>
         </Row>
         <Row>
