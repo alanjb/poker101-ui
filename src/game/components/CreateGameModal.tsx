@@ -26,12 +26,13 @@ function CreateGameModal(props: Props) {
           userId: '61a683f15073df63ea253191'
         })
       .then(res => {
-        if (res.data) {
+        if (res.data.is_error) {
+          alert(res.data.message)
+        }
+        else {
           const { game } = res.data;
-
           created(game);
         }
-        
       })
       .catch(error => {
         alert("Failed to create game \n\n" + error);
@@ -65,7 +66,7 @@ function CreateGameModal(props: Props) {
       >
       {({ dirty, isValid }: any) => (
       <Form>
-        <FormikField type="text" name="chips" label="Required chips per player" placeholder="$" required/>
+        <FormikField type="text" name="chips" label="Required points per player" placeholder="$" required/>
         <FormikField type="text" name="ante" label="Ante" placeholder="$" required />
         <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Create</Button>
         <Button color="secondary" variant="contained" onClick={toggle}>Cancel</Button>
