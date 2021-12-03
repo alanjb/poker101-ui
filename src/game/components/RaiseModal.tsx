@@ -20,14 +20,18 @@ function RaiseModal(props: Props) {
             gameId: game._id,
             raise: raise
           })
-        .then(res => {
-          const { game } = res.data;
-
-          raised(game);
-        })
-        .catch(error => {
-          alert("Failed to create game \n\n" + error);
-        })
+          .then(res => {
+            if (res.data.is_error) {
+              alert(res.data.message)
+            }
+            else {
+              const { game } = res.data;
+              raised(game);
+            }
+          })
+          .catch(error => {
+            alert("Failed to raise \n\n" + error);
+          })
     }
 
     const CreateGameSchema = Yup.object().shape({

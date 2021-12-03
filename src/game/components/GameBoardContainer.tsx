@@ -2,13 +2,12 @@ import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import Game from '../models/Game';
-import BetModal from './BetModal';
 import RaiseModal from './RaiseModal';
+import backOfCard from '../../app/assets/back.png';
 
 const GameBoardContainer = (props: Props) => {
-  const [isBetModalOpen, setBetModal] = useState(false);
   const [isRaiseModalOpen, setRaiseModal] = useState(false);
-  const [user] = useState({ email: "tim@gmail.com" });
+  const [user] = useState({ email: "jim@gmail.com" });
   const [player, setPlayer] = useState(null);
   const [game, setGame] = useState(null);
   const gameId = Object.values(props.match.params)[0];
@@ -32,16 +31,8 @@ const GameBoardContainer = (props: Props) => {
     init();
   }, [gameId, user.email]); 
 
-  const toggleBetModal = () => {
-    setBetModal(!isBetModalOpen);
-  }
-
   const toggleRaiseModal = () => {
     setRaiseModal(!isRaiseModalOpen);
-  }
-
-  const betted = () => {
-    console.log('bet complete')
   }
 
   const check = () => {
@@ -91,32 +82,51 @@ const GameBoardContainer = (props: Props) => {
   return (
     <Fragment>
       <div className="game-board-container">
+        {game && game.players &&
+          <div className="opposing-players-container">
+            {game && game.players.map((player, i) => {
+              if (!player.isDealer) {
+                return <div className={`player-container opposing-player-container${i}`}>
+                  <div className="player-cards-container">
+                    <img alt="backOfCard" className="backOfCard" src={backOfCard}></img>
+                    <img alt="backOfCard" className="backOfCard" src={backOfCard}></img>
+                    <img alt="backOfCard" className="backOfCard" src={backOfCard}></img>
+                    <img alt="backOfCard" className="backOfCard" src={backOfCard}></img>
+                    <img alt="backOfCard" className="backOfCard" src={backOfCard}></img>
+                  </div>
+                  {player.email}, ${player.points}
+                </div>
+              }
+              else {
+                return null;
+              }
+            })}
+          </div>
+        }
+        
         <div className="chip-pot-container">
           <div className="pot-data">
             <b>Round {game && game.roundCount}</b>
               <br/><br/>
-            Total Pot: 
-            ${game && game.pot}
+              Total Pot: 
+              ${game && game.pot}
           </div>
         </div>
 
         {game && player && 
-          <div className="player-container user-player-container"> 
+          <div className="player-container user-player-container">
             <div className="player-cards-container">
-              {/* Get players cards and render based on card deck asset set */}
+
             </div>
-            <br/> <br/>
+
+            <br/> 
           
             <div className="player-game-controls-container">
               <Button className="game-button" color="secondary" onClick={check} disabled={!player.isTurn}>
                 Check
               </Button>
 
-              <Button className="game-button" color="primary" onClick={toggleBetModal} disabled={!player.isTurn}>
-                Bet
-              </Button>
-
-              <Button className="game-button" color="dark" onClick={call} disabled={!player.isTurn}>
+              <Button className="game-button" color="primary" onClick={call} disabled={!player.isTurn}>
                 Call
               </Button>
     
@@ -135,14 +145,12 @@ const GameBoardContainer = (props: Props) => {
             <br/>
             <div>
               <div className="player-username-container">
-                {player.email} <br/> <br/> 
-                ${player.points}
+                {player.email}, ${player.points} 
               </div>
             </div>
           </div>
         }
       </div>
-      <BetModal isOpen={isBetModalOpen} toggle={toggleBetModal} betted={betted} game={game}/>
       <RaiseModal isOpen={isRaiseModalOpen} toggle={toggleRaiseModal} raised={raised} game={game}/>
     </Fragment>
   );

@@ -18,12 +18,12 @@ body {
     position: absolute;
     left: 0;
     text-align: right;
+    margin-top: 40px;
 
     .chip-pot-container {
         text-align: center;
-        position: fixed;
-        left: 45%;
-        top: 45%;
+        position: relative;
+        top: 25%;
     }
 
     .player-container {
@@ -38,33 +38,33 @@ body {
         }
     }
 
-    .opposing-player-container0 {
-        bottom: 30%;
-        left: 5%;
-    }
+    // .opposing-player-container0 {
+    //     bottom: 30%;
+    //     left: 5%;
+    // }
 
-    .opposing-player-container1 {
-        bottom: 60%;
-        left: 5%;
-    }
+    // .opposing-player-container1 {
+    //     bottom: 60%;
+    //     left: 5%;
+    // }
 
-    .opposing-player-container2 {
-        bottom: 80%;
-        left: 50%;
-    }
+    // .opposing-player-container2 {
+    //     bottom: 80%;
+    //     left: 50%;
+    // }
 
-    .opposing-player-container3 {
-        bottom: 60%;
-        left: 80%;
-    }
+    // .opposing-player-container3 {
+    //     bottom: 60%;
+    //     left: 80%;
+    // }
 
-    .opposing-player-container4 {
-        bottom: 30%;
-        left: 80%;
-    }
+    // .opposing-player-container4 {
+    //     bottom: 30%;
+    //     left: 80%;
+    // }
 
     .user-player-container {
-        top: 75%;
+        top: 55%;
         position: relative;
     }
 }
@@ -80,4 +80,10 @@ tbody, td, tfoot, th, thead, tr {
 
 .game-button {
     margin-right: 10px;
+}
+
+.opposing-players-container{
+    display: flex;
+    padding: 25px;
+    justify-content: space-between;
 }

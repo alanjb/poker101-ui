@@ -30,8 +30,13 @@ const GameCard = ({ game }) => {
         }
       })
       .then(res => {
-        setJoined(true);
-        setPlayers(res.data.game.players)
+        if (res.data.is_error) {
+          alert(res.data.message)
+        }
+        else {
+          setJoined(true);
+          setPlayers(res.data.game.players)
+        }
       })
       .catch(error => {
         alert("Error! Could not add player to this game \n\n" + error);
