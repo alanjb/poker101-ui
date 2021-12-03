@@ -5,7 +5,7 @@ import { Container, Row, Col, Button } from 'reactstrap';
 import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
 import dealerSvg from  '../../app/assets/icons/dice-5-fill.svg';
 
-function WaitingRoomContainer(props) {
+function LobbyContainer(props) {
   const gameId = Object.values(props.match.params)[0];
   const history = useHistory();
   const [players, setPlayers] = useState([]);
@@ -57,7 +57,7 @@ function WaitingRoomContainer(props) {
         <div className="content">
           <Row>
             <Col>
-              <h3 className="text-light">Waiting Room</h3>
+              <h3 className="text-light">Lobby</h3>
               </Col>
               <Col>
                 <div className="start-game-button-container justify-content-end">
@@ -95,4 +95,4 @@ function WaitingRoomContainer(props) {
   );
 }
 
-export default WaitingRoomContainer;
+export default LobbyContainer;

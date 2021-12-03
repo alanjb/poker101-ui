@@ -8,7 +8,7 @@ import HomeContainer from "./home/HomeContainer";
 import ProfileContainer from '../../user/components/ProfileContainer';
 import DashboardContainer from './dashboard/DashboardContainer';
 import GameContainer from '../../game/components/GameBoardContainer';
-import WaitingRoomContainer from '../../game/components/WaitingRoomContainer';
+import WaitingRoomContainer from '../../game/components/LobbyContainer';
 
 const AppContainer = () => {
 
