@@ -7,7 +7,7 @@ import axios from 'axios';
 const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
   const history = useHistory();
-  const [user] = useState({ email: "timmy@gmail.com" });
+  const [user] = useState({ email: "jim@gmail.com" });
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const GameCard = ({ game }) => {
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
           gameId: game._id,
-          userId: '61a684635073df63ea253193'
+          userId: '61a684065073df63ea253192'
         }
       })
       .then(res => {
