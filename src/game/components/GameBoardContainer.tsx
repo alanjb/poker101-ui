@@ -7,7 +7,7 @@ import backOfCard from '../../app/assets/back.png';
 
 const GameBoardContainer = (props: Props) => {
   const [isRaiseModalOpen, setRaiseModal] = useState(false);
-  const [user] = useState({ email: "jim@gmail.com" });
+  const [user] = useState({ email: "alan@gmail.com" });
   const [player, setPlayer] = useState(null);
   const [game, setGame] = useState(null);
   const gameId = Object.values(props.match.params)[0];
@@ -67,8 +67,9 @@ const GameBoardContainer = (props: Props) => {
       })
   }
 
-  const raised = () => {
-    console.log('raised')
+  const raised = (game: Game) => {
+    alert(player.email + ' has raised');
+    setGame(game);
   }
 
   const discard = () => {
@@ -86,7 +87,7 @@ const GameBoardContainer = (props: Props) => {
           <div className="opposing-players-container">
             {game && game.players.map((player, i) => {
               if (!player.isDealer) {
-                return <div className={`player-container opposing-player-container${i}`}>
+                return <div key={i} className={`player-container opposing-player-container${i}`}>
                   <div className="player-cards-container">
                     <img alt="backOfCard" className="backOfCard" src={backOfCard}></img>
                     <img alt="backOfCard" className="backOfCard" src={backOfCard}></img>

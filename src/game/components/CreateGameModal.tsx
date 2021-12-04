@@ -34,8 +34,8 @@ function CreateGameModal(props: Props) {
           created(game);
         }
       })
-      .catch(error => {
-        alert("Failed to create game \n\n" + error);
+      .catch(() => {
+        alert("Failed to create game");
       })
   }
 

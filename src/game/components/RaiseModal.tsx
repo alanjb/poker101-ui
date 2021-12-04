@@ -15,7 +15,7 @@ function RaiseModal(props: Props) {
       const {raise} = values;
     
       axios
-        .post(`http://localhost:8000/api/game/raise`,
+        .put(`http://localhost:8000/api/game/raise`,
           {
             gameId: game._id,
             raise: raise
