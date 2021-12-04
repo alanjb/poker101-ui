@@ -7,7 +7,7 @@ import backOfCard from '../../app/assets/back.png';
 
 const GameBoardContainer = (props: Props) => {
   const [isRaiseModalOpen, setRaiseModal] = useState(false);
-  const [user] = useState({ email: "jim@gmail.com" });
+  const [user] = useState({ email: "timmy@gmail.com" });
   const [player, setPlayer] = useState(null);
   const [game, setGame] = useState(null);
   const gameId = Object.values(props.match.params)[0];
@@ -67,8 +67,9 @@ const GameBoardContainer = (props: Props) => {
       })
   }
 
-  const raised = () => {
-    console.log('raised')
+  const raised = (game: Game) => {
+    alert(player.email + ' has raised');
+    setGame(game);
   }
 
   const discard = () => {
