@@ -38,34 +38,12 @@ body {
         }
     }
 
-    // .opposing-player-container0 {
-    //     bottom: 30%;
-    //     left: 5%;
-    // }
-
-    // .opposing-player-container1 {
-    //     bottom: 60%;
-    //     left: 5%;
-    // }
-
-    // .opposing-player-container2 {
-    //     bottom: 80%;
-    //     left: 50%;
-    // }
-
-    // .opposing-player-container3 {
-    //     bottom: 60%;
-    //     left: 80%;
-    // }
-
-    // .opposing-player-container4 {
-    //     bottom: 30%;
-    //     left: 80%;
-    // }
-
     .user-player-container {
-        top: 55%;
+        display: flex;
+        justify-content: space-between;
+        top: 45%;
         position: relative;
+        padding: 35px;
     }
 }
 
@@ -86,4 +64,10 @@ tbody, td, tfoot, th, thead, tr {
     display: flex;
     padding: 25px;
     justify-content: space-between;
+}
+
+.game-logger {
+    border: 1px solid black;
+    width: 350px;
+    overflow: scroll;
 }

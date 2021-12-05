@@ -3,7 +3,9 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Container, Row, Col, Button } from 'reactstrap';
 import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
-import dealerSvg from  '../../app/assets/icons/dice-5-fill.svg';
+import dealerSvg from '../../app/assets/icons/dice-5-fill.svg';
+import socketIOClient from 'socket.io-client';
+const ENDPOINT = "http://localhost:8000";
 
 function LobbyContainer(props) {
   const gameId = Object.values(props.match.params)[0];
@@ -11,6 +13,8 @@ function LobbyContainer(props) {
   const [players, setPlayers] = useState([]);
   const [user] = useState({ email: "alan@gmail.com" });
   const [player, setPlayer] = useState(null);
+  const [timer, setTimer] = useState("");
+  const [gameStarted, setStartGame] = useState(false);
 
   useEffect(() => {
     async function init() {
@@ -30,6 +34,14 @@ function LobbyContainer(props) {
       });
     }
     init();
+
+    const socket = socketIOClient(ENDPOINT, {transports: ['websocket', 'polling', 'flashsocket']});
+
+    socket.on("getLobbyTimer", data => {
+      setTimer(data);
+      return () => socket.disconnect();
+    });
+
   }, [gameId, user.email]); 
 
   const start = () => {
@@ -42,6 +54,8 @@ function LobbyContainer(props) {
       })
       .then(res => {
         const gameId = res.data.game._id;
+
+        setStartGame(true);
 
         history.push('/game/' + gameId)
       })
@@ -56,16 +70,15 @@ function LobbyContainer(props) {
       <Container className="themed-container" fluid={true}>
         <div className="content">
           <Row>
+            <Col><h3 className="text-light">Lobby</h3></Col>
+            {!gameStarted ? <Col><span className="text-light">Game starts in: <time dateTime={timer}>{timer}</time></span></Col> : null}
             <Col>
-              <h3 className="text-light">Lobby</h3>
-              </Col>
-              <Col>
-                <div className="start-game-button-container justify-content-end">
-                  {player && player.isDealer && 
-                    <Button className="align-self-end" color="info" onClick={start}>
-                      Start game
-                    </Button>
-                  }
+              <div className="start-game-button-container justify-content-end">
+                {player && player.isDealer && 
+                  <Button className="align-self-end" color="info" onClick={start}>
+                    Start game
+                  </Button>
+                }
               </div>
             </Col>
           </Row>
