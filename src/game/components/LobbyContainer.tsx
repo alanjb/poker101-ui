@@ -13,20 +13,35 @@ function LobbyContainer(props) {
   const [players, setPlayers] = useState([]);
   const [user] = useState({ email: "alan@gmail.com" });
   const [player, setPlayer] = useState(null);
-  const [timer, setTimer] = useState("");
+  const [timer, setTimer] = useState(null);
   const [gameStarted, setStartGame] = useState(false);
+
+  const padTime = time => {
+    return String(time).length === 1 ? `0${time}` : `${time}`;
+  };
+
+  const format = time => {
+    // Convert seconds into minutes and take the whole part
+    const minutes = Math.floor(time / 60);
+  
+    // Get the seconds left after converting minutes
+    const seconds = time % 60;
+  
+    //Return combined values as string in format mm:ss
+    return `${minutes}:${padTime(seconds)}`;
+  };
 
   useEffect(() => {
     async function init() {
-      const res = await axios.get(`http://localhost:8000/api/game/game`, {
+      const lobbytimerRes = await axios.put(`http://localhost:8000/api/game/initlobbytimer`, {
         params: {
-          gameId: gameId, 
+          gameId: gameId 
         }
       });
 
-      setPlayers(res.data.game.players);
+      setPlayers(lobbytimerRes.data.game.players);
 
-      res.data.game.players.forEach(player => {
+      lobbytimerRes.data.game.players.forEach(player => {
         if (player.email === user.email) {
           setPlayer(player);
           return;
@@ -38,7 +53,8 @@ function LobbyContainer(props) {
     const socket = socketIOClient(ENDPOINT, {transports: ['websocket', 'polling', 'flashsocket']});
 
     socket.on("getLobbyTimer", data => {
-      setTimer(data);
+      if(data.gameId == gameId)
+      setTimer(data.timer);
       return () => socket.disconnect();
     });
 
@@ -71,7 +87,8 @@ function LobbyContainer(props) {
         <div className="content">
           <Row>
             <Col><h3 className="text-light">Lobby</h3></Col>
-            {!gameStarted ? <Col><span className="text-light">Game starts in: <time dateTime={timer}>{timer}</time></span></Col> : null}
+            {!gameStarted ? 
+            <Col><span className="text-light">Game starts in: <time dateTime={timer}>{format(timer)}</time></span></Col> : null}
             <Col>
               <div className="start-game-button-container justify-content-end">
                 {player && player.isDealer && 
