@@ -68,7 +68,6 @@ function LobbyContainer(props) {
   }, [gameId, user.email]); 
 
   useEffect(() => {
-    console.log("expired")
     if(isTimerExpired)
       start();
   }, [isTimerExpired]);
