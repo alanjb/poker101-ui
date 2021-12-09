@@ -14,6 +14,7 @@ function LobbyContainer(props) {
   const [user] = useState({ email: "alan@gmail.com" });
   const [player, setPlayer] = useState(null);
   const [timer, setTimer] = useState(null);
+  const [isTimerExpired, setIsTimerExpired] = useState(false);
   const [gameStarted, setStartGame] = useState(false);
 
   const padTime = time => {
@@ -58,7 +59,19 @@ function LobbyContainer(props) {
       return () => socket.disconnect();
     });
 
+    socket.on("LobbytTimerExpired", data => {
+      if(data.gameId == gameId)
+      setIsTimerExpired(data.LobbytTimerExpired);
+      return () => socket.disconnect();
+    });
+
   }, [gameId, user.email]); 
+
+  useEffect(() => {
+    console.log("expired")
+    if(isTimerExpired)
+      start();
+  }, [isTimerExpired]);
 
   const start = () => {
     //discuss security - check permissions on backend
