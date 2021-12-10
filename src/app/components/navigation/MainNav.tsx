@@ -26,8 +26,8 @@ const MainNav = () => {
 
       {(
         <Button 
+          to="/login"
           color="warning log-button"
-          onClick={() => console.log('login')}
         >
           Log In
         </Button>

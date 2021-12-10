@@ -11,7 +11,7 @@ interface FormikFieldProps {
   placeholder?: string;
 }
 
-const FormikField: React.FC<FormikFieldProps> = ({ name, label, type = "text", required = false, placeholder= ''}) => {
+const FormikField: React.FC<FormikFieldProps> = ({ name, label, type, required = false, placeholder = '' }) => {
   return (
     <div className="FormikField">
       <Field
