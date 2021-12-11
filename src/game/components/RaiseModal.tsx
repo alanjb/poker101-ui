@@ -6,16 +6,18 @@ import FormikField from "../../app/components/dashboard/FormikField/index";
 import Button from '@material-ui/core/Button';
 import * as Yup from 'yup';
 import Game from '../models/Game';
+import { getEnv } from '../../app/config/utils';
 
 function RaiseModal(props: Props) {
   const { isOpen, toggle, game } = props;
+  const url = getEnv();
 
     const raise = (values: any) => {
       const { raised } = props;
       const { raise } = values;
     
       axios
-        .put(`http://localhost:8000/api/game/raise`,
+        .put(`${url}/api/game/raise`,
           {
             gameId: game._id,
             raise: raise

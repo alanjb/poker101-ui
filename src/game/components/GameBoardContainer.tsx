@@ -6,8 +6,7 @@ import backOfCard from '../../app/assets/back.png';
 import socketIOClient from 'socket.io-client';
 import Player from '../models/Player';
 import { useParams } from 'react-router-dom';
-
-const ENDPOINT = "http://localhost:8000";
+import { getEnv } from '../../app/config/utils';
 
 const GameBoardContainer = () => {
   const [isRaiseModalOpen, setRaiseModal] = useState(false);
@@ -16,11 +15,12 @@ const GameBoardContainer = () => {
   const [player, setPlayer] = useState(null);
   const [game, setGame] = useState(null);
   const [gameLogger, setGameLogger] = useState([]);
+  const url = getEnv();
 
   useEffect(() => {
     async function init() {
       try {
-        const res = await axios.get(`http://localhost:8000/api/game/game`, {
+        const res = await axios.get(`${url}/api/game/game`, {
           params: {
             gameId: gameId, 
           }
@@ -37,7 +37,7 @@ const GameBoardContainer = () => {
     
         setPlayer(player);
 
-        const socket = socketIOClient(ENDPOINT, { transports: ['websocket', 'polling', 'flashsocket'] });
+        const socket = socketIOClient(url, { transports: ['websocket', 'polling', 'flashsocket'] });
 
         socket.on("getUpdatedGame", updatedGame => {
           setGame(game => {
@@ -66,7 +66,7 @@ const GameBoardContainer = () => {
     }
 
     init();
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, user]); 
 
   const toggleRaiseModal = () => {
@@ -75,7 +75,7 @@ const GameBoardContainer = () => {
 
   const check = () => {
     axios
-      .put(`http://localhost:8000/api/game/check`, {
+      .put(`${url}/api/game/check`, {
         params: {
           gameId: gameId,
         }
@@ -95,7 +95,7 @@ const GameBoardContainer = () => {
 
   const call = () => {
     axios
-      .put(`http://localhost:8000/api/game/call`, {
+      .put(`${url}/api/game/call`, {
         params: {
           gameId: gameId,
         }

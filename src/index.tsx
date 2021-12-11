@@ -6,6 +6,8 @@ import AppContainer from "./app/components/AppContainer";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app/styles/main.scss';
 
+require('dotenv').config();
+
 ReactDOM.render(
     <BrowserRouter >
       <AppContainer/>

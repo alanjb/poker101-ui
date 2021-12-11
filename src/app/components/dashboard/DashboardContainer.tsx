@@ -4,18 +4,21 @@ import { Button, Col, Container, Row } from 'reactstrap';
 import Game from '../../../game/models/Game';
 import GamesContainer from '../../../game/components/GamesContainer';
 import axios from 'axios';
+import { getEnv } from '../../../app/config/utils';
 
 const DashboardContainer = () => {
   const [isCreateGameModalOpen, toggleCreateGameModal] = useState(false);
   const [gamesArray, setGames] = useState([]);
+  const url = getEnv();
 
   useEffect(() => {
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); 
 
   function init() {
     axios
-      .get(`http://localhost:8000/api/game/games`)
+      .get(`${url}/api/game/games`)
       .then(res => {
         const { games } = res.data;
 

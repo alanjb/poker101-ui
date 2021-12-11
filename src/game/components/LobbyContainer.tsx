@@ -5,7 +5,7 @@ import { Container, Row, Col, Button } from 'reactstrap';
 import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
 import dealerSvg from '../../app/assets/icons/dice-5-fill.svg';
 import socketIOClient from 'socket.io-client';
-const ENDPOINT = "http://localhost:8000";
+import { getEnv } from '../../app/config/utils';
 
 function LobbyContainer() {
   const history = useNavigate();
@@ -17,6 +17,7 @@ function LobbyContainer() {
   const [timer, setTimer] = useState(null);
   const [isTimerExpired, setIsTimerExpired] = useState(false);
   const [gameStarted, setStartGame] = useState(false);
+  const url = getEnv();
 
   const padTime = time => {
     return String(time).length === 1 ? `0${time}` : `${time}`;
@@ -38,7 +39,7 @@ function LobbyContainer() {
       // const { gameId } = useParams();
 
       try {
-        const lobbytimerRes = await axios.put(`http://localhost:8000/api/game/initlobbytimer`, {
+        const lobbytimerRes = await axios.put(`${url}/api/game/initlobbytimer`, {
           params: {
             gameId: gameId 
           }
@@ -60,7 +61,7 @@ function LobbyContainer() {
 
     init();
 
-    const socket = socketIOClient(ENDPOINT, {transports: ['websocket', 'polling', 'flashsocket']});
+    const socket = socketIOClient(url, {transports: ['websocket', 'polling', 'flashsocket']});
 
     socket.on("getLobbyTimer", data => {
       if(data.gameId === gameId)
@@ -69,17 +70,18 @@ function LobbyContainer() {
     });
 
     socket.on("LobbytTimerExpired", data => {
-      if(data.gameId === gameId)
-      setIsTimerExpired(data.LobbytTimerExpired);
+      if (data.gameId === gameId)
+        setIsTimerExpired(data.LobbytTimerExpired);
       return () => socket.disconnect();
     });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameId, user.email]); 
 
   const start = () => {
     //discuss security - check permissions on backend
     axios
-      .put(`http://localhost:8000/api/game/start`, {
+      .put(`${url}/api/game/start`, {
         params: {
           gameId: gameId
         }

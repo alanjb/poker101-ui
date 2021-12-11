@@ -26,9 +26,7 @@ const MainNav = () => {
       {(
         <NavLink 
           to="/login"
-          exact
-          className="nav-link"
-          activeClassName="router-link-exact-active"
+          className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
         >
           Log In
         </NavLink>

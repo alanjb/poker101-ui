@@ -6,9 +6,11 @@ import FormikField from "../../app/components/dashboard/FormikField";
 import Button from '@material-ui/core/Button';
 import * as Yup from 'yup';
 import Game from '../models/Game';
+import { getEnv } from '../../app/config/utils';
 
 function CreateGameModal(props: Props) {
   const { isOpen, toggle } = props;
+  const url = getEnv();
 
   const create = (values : any) => {
     const { created } = props;
@@ -20,7 +22,7 @@ function CreateGameModal(props: Props) {
     }
   
     axios
-      .post(`http://localhost:8000/api/game/create`,
+      .post(`${url}/api/game/create`,
         {
           game: newGame,
           userId: '61b3e77b8df175f88a5c868e'

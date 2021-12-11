@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, CardTitle } from 'reactstrap';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { getEnv } from '../../app/config/utils';
+
 
 const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
   const history = useNavigate();
   const [user] = useState({ email: "jim@gmail.com" });
   const [players, setPlayers] = useState([]);
+  const url = getEnv();
 
   useEffect(() => {
     setPlayers(game.players);
@@ -22,7 +25,7 @@ const GameCard = ({ game }) => {
   //don't allow dup players
   function addPlayer() {
     axios
-      .put(`http://localhost:8000/api/game/add-player`, {
+      .put(`${url}/api/game/add-player`, {
         params: {
           gameId: game._id,
           userId: '61b3e7d68df175f88a5c8694'
