@@ -1,6 +1,5 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Button } from "reactstrap";
 
 const MainNav = () => {
 
@@ -25,21 +24,24 @@ const MainNav = () => {
       )}
 
       {(
-        <Button 
-          color="warning log-button"
-          onClick={() => console.log('login')}
+        <NavLink 
+          to="/login"
+          exact
+          className="nav-link"
+          activeClassName="router-link-exact-active"
         >
           Log In
-        </Button>
+        </NavLink>
       )} 
-      
+
+      {/*       
       {(
         <Button color="danger log-button"
         onClick={() => console.log('logout')}
         >
           Log Out
         </Button>
-      )} 
+      )}  */}
     </div>
   );
 }

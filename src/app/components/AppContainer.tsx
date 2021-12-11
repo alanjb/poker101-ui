@@ -9,6 +9,8 @@ import ProfileContainer from '../../user/components/ProfileContainer';
 import DashboardContainer from './dashboard/DashboardContainer';
 import GameBoardContainer from '../../game/components/GameBoardContainer';
 import WaitingRoomContainer from '../../game/components/LobbyContainer';
+import LoginContainer from './login/LoginContainer';
+import SignUpContainer from './login/SignUpContainer';
 
 const AppContainer = () => {
 
