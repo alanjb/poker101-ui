@@ -6,6 +6,7 @@ import { Container, Row, Col, Button } from "reactstrap";
 import User from '../../../user/models/User';
 import FormikField from '../dashboard/FormikField';
 import * as Yup from 'yup';
+import { NavLink } from 'react-router-dom';
 
 function LoginContainer() { 
   const login = (values: any) => {
@@ -19,7 +20,8 @@ function LoginContainer() {
     axios
       .post(`http://localhost:8000/api/user/login`,
         {
-          user: newUser,
+          username: username,
+          password: password
         },
         {
           withCredentials: true,
@@ -31,7 +33,8 @@ function LoginContainer() {
         }
         else {
           const { user } = res.data;
-          console.log(user)
+
+          console.log(user);
           //handle user sign up successful - route to dashboard
         }
       })
@@ -40,15 +43,13 @@ function LoginContainer() {
       })
   }
 
-  const SignUpUserSchema = Yup.object().shape({
-    email: Yup.string()
-      .email('Invalid email')
+  const LoginUserSchema = Yup.object().shape({
+    username: Yup
+      .string()
       .required('Required'),
-    username: Yup.string()
-      .min(3, 'min length of username is 2')
-      .max(20, 'max length of username is 20'),
-    password: Yup.string()
-      .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
+    password: Yup
+      .string()
+      .required('Required')
   });
 
   return (
@@ -57,24 +58,27 @@ function LoginContainer() {
         <Container className="home-header themed-container" fluid={true}>
         <Row>
           <Col>
-            <Formik<any>
-              initialValues={{
-                email: '',
-                username: '',
-                password: '',
-              }}
-              validationSchema={SignUpUserSchema}
-              onSubmit={values => { login(values) }}
-            >
-            {({ dirty, isValid }: any) => (
-            <Form>
-              <FormikField type="text" name="email" label="Email" placeholder="Enter Email" required/>
-              <FormikField type="text" name="username" label="Username" placeholder="Enter Username" required/>
-              <FormikField type="text" name="password" label="Password" placeholder="Enter password" required />
-              <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Sign in</Button>
-            </Form>
-            )}
-            </Formik>
+              <div className='login-container'>
+              <h2 className="login-header-text">Login</h2>
+              <Formik<any>
+                  initialValues={{
+                    username: '',
+                    password: '',
+                  }}
+                  validationSchema={LoginUserSchema}
+                  onSubmit={values => { login(values) }}
+                >
+                {({ dirty, isValid }: any) => (
+                  <Form>
+                    <FormikField type="text" name="username" label="Username" placeholder="Enter Username" required/>
+                    <FormikField type="password" name="password" label="Password" placeholder="Enter password" required />
+                    <br/>  
+                      <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Sign in</Button>
+                      <NavLink to='/signup' className="create-account-button" color="secondary">Create an account</NavLink>
+                  </Form>
+                )}
+              </Formik>
+            </div>
           </Col>
         </Row>
 

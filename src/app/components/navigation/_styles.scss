@@ -19,16 +19,14 @@
         color: white;
     }
 
-    .nav-link-active {
-        text-decoration: underline;
-    }
-
-    .log-button {
-        border-radius: 0px;
-    }
-
     .navigation-links {
         display: flex;
         padding: 0px;
     }
+}
+
+.login-button {
+    border-radius: 0px;
+    color: white;
+    padding: 0px 5px;
 }
