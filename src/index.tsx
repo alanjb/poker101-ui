@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import { Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import AppContainer from "./app/components/AppContainer";
-import history from './app/routing/history';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app/styles/main.scss';
 
 ReactDOM.render(
-    <Router history={history}>
+    <BrowserRouter >
       <AppContainer/>
-    </Router>,
+    </BrowserRouter>,
     document.getElementById("root")
 );
 

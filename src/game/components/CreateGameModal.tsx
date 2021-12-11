@@ -23,11 +23,11 @@ function CreateGameModal(props: Props) {
       .post(`http://localhost:8000/api/game/create`,
         {
           game: newGame,
-          userId: '61a683f15073df63ea253191'
+          userId: '61b3e77b8df175f88a5c868e'
         })
       .then(res => {
         if (res.data.is_error) {
-          alert(res.data.message)
+          alert(res.data.message);
         }
         else {
           const { game } = res.data;
@@ -35,7 +35,7 @@ function CreateGameModal(props: Props) {
         }
       })
       .catch(() => {
-        alert("Failed to create game");
+        alert("Error: Failed to create game");
       })
   }
 
