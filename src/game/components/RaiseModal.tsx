@@ -12,7 +12,7 @@ function RaiseModal(props: Props) {
 
     const raise = (values: any) => {
       const { raised } = props;
-      const {raise} = values;
+      const { raise } = values;
     
       axios
         .put(`http://localhost:8000/api/game/raise`,
@@ -25,12 +25,11 @@ function RaiseModal(props: Props) {
               alert(res.data.message)
             }
             else {
-              const { game } = res.data;
-              raised(game);
+              raised();
             }
           })
-          .catch(error => {
-            alert("Failed to raise \n\n" + error);
+          .catch(() => {
+            alert("Error: Failed to raise");
           })
     }
 
@@ -69,7 +68,7 @@ function RaiseModal(props: Props) {
 type Props = {
   isOpen: boolean;
   toggle: () => void;
-  raised: (game: Game) => void;
+  raised: () => void;
   game: Game;
 };
 

@@ -1,61 +1,71 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from 'reactstrap';
-import Game from '../models/Game';
 import RaiseModal from './RaiseModal';
 import backOfCard from '../../app/assets/back.png';
 import socketIOClient from 'socket.io-client';
-import { resolve } from 'path';
 import Player from '../models/Player';
+import { useParams } from 'react-router-dom';
+
 const ENDPOINT = "http://localhost:8000";
 
-const GameBoardContainer = (props: Props) => {
+const GameBoardContainer = () => {
   const [isRaiseModalOpen, setRaiseModal] = useState(false);
-  const [user] = useState({ email: "jim@gmail.com" });
+  const { gameId } = useParams();
+  const [user] = useState({ email: "timmy@gmail.com" });
   const [player, setPlayer] = useState(null);
   const [game, setGame] = useState(null);
-  const gameId = Object.values(props.match.params)[0];
   const [gameLogger, setGameLogger] = useState([]);
 
   useEffect(() => {
     async function init() {
-      const res = await axios.get(`http://localhost:8000/api/game/game`, {
-        params: {
-          gameId: gameId, 
-        }
-      });
+      try {
+        const res = await axios.get(`http://localhost:8000/api/game/game`, {
+          params: {
+            gameId: gameId, 
+          }
+        });
+
+        setGame(res.data.game);
+
+        //create a queue here so it shows correct order of events 
+        setGameLogger(res.data.game.roundCount === 1 ? res.data.game.roundOneMoves : res.data.game.roundTwoMoves);
     
-      setGame(res.data.game);
-      setGameLogger(res.data.game.roundCount === 1 ? res.data.game.roundOneMoves : res.data.game.roundTwoMoves);
-  
-      const player = res.data.game.players.find(player => 
-        player.email === user.email
-      );
-  
-      setPlayer(player);
+        const player = res.data.game.players.find(player => 
+          player.email === user.email
+        );
+    
+        setPlayer(player);
+
+        const socket = socketIOClient(ENDPOINT, { transports: ['websocket', 'polling', 'flashsocket'] });
+
+        socket.on("getUpdatedGame", updatedGame => {
+          setGame(game => {
+            return {
+              ...game,
+              players: updatedGame.players,
+              roundOneMoves: updatedGame.roundOneMoves,
+              roundTwoMoves: updatedGame.roundTwoMoves,
+              pot: updatedGame.pot,
+              roundCount: updatedGame.roundCount
+            }
+          })
+    
+          setGameLogger(updatedGame.roundCount === 1 ? updatedGame.roundOneMoves : updatedGame.roundTwoMoves);
+    
+          const player = updatedGame.players.find(player => 
+            player.email === user.email
+          );
+          setPlayer(player);
+          return () => socket.disconnect();
+        });
+      }
+      catch (error) {
+        alert('Error: Could not get game')
+      }
     }
+
     init();
-
-    const socket = socketIOClient(ENDPOINT, { transports: ['websocket', 'polling', 'flashsocket'] });
-
-    socket.on("getUpdatedGame", updatedGame => {
-      setGame(game => {
-        return {
-          ...game,
-          players: updatedGame.players,
-          roundOneMoves: updatedGame.roundOneMoves
-        }
-      })
-
-      setGameLogger(updatedGame.roundCount === 1 ? updatedGame.roundOneMoves : updatedGame.roundTwoMoves);
-
-      const player = updatedGame.players.find(player => 
-        player.email === user.email
-      );
-      setPlayer(player);
-      resolve();
-      return () => socket.disconnect();
-    });
 
   }, [gameId, user]); 
 
@@ -63,23 +73,24 @@ const GameBoardContainer = (props: Props) => {
     setRaiseModal(!isRaiseModalOpen);
   }
 
-  const check = async () => {
-    try {
-      const check = await axios.put(`http://localhost:8000/api/game/check`, { params: { gameId: gameId } });
-
-      console.log(check)
-
-      if (!check) {
-        alert('Error: Could not check');
-        return;
-      }
-
-      alert(player.email + ' has checked');
-
-    }
-    catch (error) {
-      alert('Error: There was an issue processing the check request')
-    };
+  const check = () => {
+    axios
+      .put(`http://localhost:8000/api/game/check`, {
+        params: {
+          gameId: gameId,
+        }
+      })
+      .then(res => {
+        if (res.data.is_error) {
+          alert(res.data.message);
+        }
+        else {
+          alert(player.email + ' has checked');
+        }  
+      })
+      .catch(() => {
+        alert("Error: Failed to check");
+      })
   }
 
   const call = () => {
@@ -89,17 +100,17 @@ const GameBoardContainer = (props: Props) => {
           gameId: gameId,
         }
       })
-      .then(game => {
+      .then(() => {
         alert(player.email + ' has called');
-        console.log(game)
       })
-      .catch(error => {
-        alert("Error: Failed to call: " + error);
+      .catch(() => {
+        alert("Error: Failed to call" );
       })
   }
 
-  const raised = (game: Game) => {
+  const raised = () => {
     alert(player.email + ' has raised');
+    toggleRaiseModal();
   }
 
   const discard = () => {
@@ -112,7 +123,6 @@ const GameBoardContainer = (props: Props) => {
 
   return (
     <Fragment>
-      { console.log(gameLogger)}
       <div className="game-board-container">
         {game && game.players &&
           <div className="opposing-players-container">
@@ -170,7 +180,7 @@ const GameBoardContainer = (props: Props) => {
               
                 <Button className="game-button" color="danger" onClick={fold} disabled={!player.isTurn}>
                   Fold
-              </Button>
+                </Button>
               
               <br />
               <br/>
@@ -184,11 +194,11 @@ const GameBoardContainer = (props: Props) => {
               <div>
                 <strong>Game Log</strong>
               </div>
-            {gameLogger.map(((update, i) =>
-              <div key={i}>
-                <span> {update?.move} {update?.bet} </span>
-              </div>
-              ))}
+              {gameLogger.map(((update, i) =>
+                <div key={i}>
+                  <span>{i === 0 ? 'Dealer: ' : 'Player  ' + i + ': '}{update?.player} {update?.move} {update?.bet} </span>
+                </div>
+                ))}
             </div>
           </div>
         }
@@ -197,10 +207,5 @@ const GameBoardContainer = (props: Props) => {
     </Fragment>
   );
 }
-
-type Props = {
-  game: Game,
-  match: any
-};
 
 export default GameBoardContainer;

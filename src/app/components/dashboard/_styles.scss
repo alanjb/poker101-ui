@@ -50,3 +50,11 @@
 .game-card-button {
     margin-left: 5px;
 }
+
+.navigation-container {
+    .navigation-links {
+        .active.nav-link {
+            color: yellow;
+        }
+    }
+}

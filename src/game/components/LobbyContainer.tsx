@@ -1,15 +1,16 @@
 import axios from 'axios';
 import React, { Fragment, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'reactstrap';
 import checkSvg from  '../../app/assets/icons/check-circle-fill.svg';
 import dealerSvg from '../../app/assets/icons/dice-5-fill.svg';
 import socketIOClient from 'socket.io-client';
 const ENDPOINT = "http://localhost:8000";
 
-function LobbyContainer(props) {
-  const gameId = Object.values(props.match.params)[0];
-  const history = useHistory();
+function LobbyContainer() {
+  const history = useNavigate();
+  const { gameId } = useParams();
+  // const [gameId, setGameId] = useState(null);
   const [players, setPlayers] = useState([]);
   const [user] = useState({ email: "alan@gmail.com" });
   const [player, setPlayer] = useState(null);
@@ -34,43 +35,46 @@ function LobbyContainer(props) {
 
   useEffect(() => {
     async function init() {
-      const lobbytimerRes = await axios.put(`http://localhost:8000/api/game/initlobbytimer`, {
-        params: {
-          gameId: gameId 
-        }
-      });
+      // const { gameId } = useParams();
 
-      setPlayers(lobbytimerRes.data.game.players);
-
-      lobbytimerRes.data.game.players.forEach(player => {
-        if (player.email === user.email) {
-          setPlayer(player);
-          return;
-        }
-      });
+      try {
+        const lobbytimerRes = await axios.put(`http://localhost:8000/api/game/initlobbytimer`, {
+          params: {
+            gameId: gameId 
+          }
+        });
+  
+        setPlayers(lobbytimerRes.data.game.players);
+  
+        lobbytimerRes.data.game.players.forEach(player => {
+          if (player.email === user.email) {
+            setPlayer(player);
+            return;
+          }
+        });
+      }
+      catch(error){
+        alert('Error: There was an issue loading this page')
+      }
     }
+
     init();
 
     const socket = socketIOClient(ENDPOINT, {transports: ['websocket', 'polling', 'flashsocket']});
 
     socket.on("getLobbyTimer", data => {
-      if(data.gameId == gameId)
+      if(data.gameId === gameId)
       setTimer(data.timer);
       return () => socket.disconnect();
     });
 
     socket.on("LobbytTimerExpired", data => {
-      if(data.gameId == gameId)
+      if(data.gameId === gameId)
       setIsTimerExpired(data.LobbytTimerExpired);
       return () => socket.disconnect();
     });
 
   }, [gameId, user.email]); 
-
-  useEffect(() => {
-    if(isTimerExpired)
-      start();
-  }, [isTimerExpired]);
 
   const start = () => {
     //discuss security - check permissions on backend
@@ -81,16 +85,26 @@ function LobbyContainer(props) {
         }
       })
       .then(res => {
-        const gameId = res.data.game._id;
+        if (res.data.is_error) {
+          alert(res.data.message);
+        }
+        else {
+          const gameId = res.data.game._id;
 
-        setStartGame(true);
-
-        history.push('/game/' + gameId)
+          setStartGame(true);
+          history('/game/' + gameId);
+        }
       })
-      .catch(error => {
-        alert("Failed to start game \n\n" + error);
-      })
+      .catch(() => {
+        alert("Error: Failed to start game");
+      });
   }
+
+  useEffect(() => {
+    if(isTimerExpired)
+      start();
+       // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTimerExpired]);
 
   return (
     <Fragment>
@@ -100,7 +114,7 @@ function LobbyContainer(props) {
           <Row>
             <Col><h3 className="text-light">Lobby</h3></Col>
             {!gameStarted ? 
-            <Col><span className="text-light">Game starts in: <time dateTime={timer}>{format(timer)}</time></span></Col> : null}
+            <Col><span className="text-light">Game starts at 5:00: <time dateTime={timer}>{format(timer)}</time></span></Col> : null}
             <Col>
               <div className="start-game-button-container justify-content-end">
                 {player && player.isDealer && 

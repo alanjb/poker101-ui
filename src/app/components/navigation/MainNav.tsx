@@ -6,24 +6,22 @@ const MainNav = () => {
 
   return (
     <div className="navigation-links">
-      {( <NavLink
+      {(<NavLink
         to="/dashboard"
-        exact
-        className="nav-link"
-        activeClassName="router-link-exact-active"
-      >
-        Dashboard
-      </NavLink>
+        children = "Dashboard"
+        // exact
+        className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+      />
       )}
 
       {(<NavLink
         to="/profile"
-        exact
-        className="nav-link"
-        activeClassName="router-link-exact-active"
-      >
-        Profile
-      </NavLink>
+        children = "Profile"
+        // exact
+        className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+        // exact
+        // className={(props) => props.isActive ? "router-link-exact-active" : "nav-link"}
+      />
       )}
 
       {(

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, CardTitle } from 'reactstrap';
-import Game from '../models/Game';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
-  const history = useHistory();
+  const history = useNavigate();
   const [user] = useState({ email: "jim@gmail.com" });
   const [players, setPlayers] = useState([]);
 
@@ -26,25 +25,25 @@ const GameCard = ({ game }) => {
       .put(`http://localhost:8000/api/game/add-player`, {
         params: {
           gameId: game._id,
-          userId: '61a684065073df63ea253192'
+          userId: '61b3e7d68df175f88a5c8694'
         }
       })
       .then(res => {
         if (res.data.is_error) {
-          alert(res.data.message)
+          alert(res.data.message);
         }
         else {
           setJoined(true);
-          setPlayers(res.data.game.players)
+          setPlayers(res.data.game.players);
         }
       })
-      .catch(error => {
-        alert("Error! Could not add player to this game \n\n" + error);
+      .catch(() => {
+        alert("Error: Could not add player to this game");
       })
   }
 
   function goToLobby() {
-    history.push('/lobby/'+game._id)
+    history('/lobby/' + game._id);
   }
 
   function leaveGame() {
@@ -88,9 +87,5 @@ const GameCard = ({ game }) => {
     </div>
   );
 }
-
-type Props = {
-  game: Game
-};
 
 export default GameCard;
