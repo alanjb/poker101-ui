@@ -7,10 +7,12 @@ import User from '../../../user/models/User';
 import FormikField from '../dashboard/FormikField';
 import * as Yup from 'yup';
 import { NavLink } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useNavigate } from "react-router-dom";
+import { getEnv } from '../../../app/config/utils';
 
 function SignUpContainer() { 
-  const history = useHistory();
+  const url = getEnv();
+  const history = useNavigate();
 
   const signUp = (values: any) => {
     const {email, username, password} = values;
@@ -22,7 +24,7 @@ function SignUpContainer() {
     }
   
     axios
-      .post(`http://localhost:8000/api/user/signup`,
+      .post(`${url}/api/user/signup`,
         {
           user: newUser,
         }, 
@@ -35,9 +37,8 @@ function SignUpContainer() {
           alert(res.data.message)
         }
         else {
-          const { user } = res.data;
           alert('Success! You have created an account. Please login.');
-          history.push('/login')
+          history('/login');
         }
       })
       .catch(() => {
@@ -82,7 +83,7 @@ function SignUpContainer() {
                       <FormikField type="password" name="password" label="Password" placeholder="Enter password" required />
                       <br/>
                       <Button color="primary" variant="contained" disabled={!dirty || !isValid} type="submit">Sign Up</Button>
-                      <NavLink to='/login' className="create-account-button" color="secondary">Have an account? Login</NavLink>
+                      <NavLink to='/login' className="create-account-button" color="secondary">Have an account? Please login here</NavLink>
                     </Form>
                   )}
                   </Formik>

@@ -3,22 +3,19 @@ import { Formik, Form} from 'formik';
 import React from 'react';
 import { Fragment } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
-import User from '../../../user/models/User';
 import FormikField from '../dashboard/FormikField';
 import * as Yup from 'yup';
 import { NavLink } from 'react-router-dom';
+import { getEnv } from '../../../app/config/utils';
 
 function LoginContainer() { 
+  const url = getEnv();
+
   const login = (values: any) => {
     const {username, password} = values;
-
-    const newUser: Partial<User> = {
-      username: username,
-      password: password
-    }
   
     axios
-      .post(`http://localhost:8000/api/user/login`,
+      .post(`${url}/api/user/login`,
         {
           username: username,
           password: password
