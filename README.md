@@ -5,6 +5,9 @@ react
 npm 
 jest
 
+## To access the application on the web
+https://swe681game.net/
+
 ## To run the application
 Run `npm run start` in root directory. The application will use http://localhost:3000/ 
 
