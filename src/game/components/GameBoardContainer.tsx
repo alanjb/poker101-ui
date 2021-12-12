@@ -174,19 +174,19 @@ const GameBoardContainer = () => {
                   {player.hand.map(card => <span>{card.symbol} {card.suit}<br/></span>)}
                 </div>
                 <br/> 
-                <Button className="game-button" color="secondary" onClick={check} disabled={!player.isTurn}>
+                <Button className="game-button" color="secondary" onClick={check}>
                   Check
                 </Button>
 
-                <Button className="game-button" color="primary" onClick={call} disabled={!player.isTurn}>
+                <Button className="game-button" color="primary" onClick={call}>
                   Call
                 </Button>
       
-                <Button className="game-button" color="info" onClick={toggleRaiseModal} disabled={!player.isTurn}>
+                <Button className="game-button" color="info" onClick={toggleRaiseModal}>
                   Raise
                 </Button>
               
-                <Button className="game-button" color="danger" onClick={fold} disabled={!player.isTurn}>
+                <Button className="game-button" color="danger" onClick={fold}>
                   Fold
                 </Button>
               <br />

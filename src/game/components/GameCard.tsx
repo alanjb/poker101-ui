@@ -8,7 +8,7 @@ import { getEnv } from '../../app/config/utils';
 const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
   const history = useNavigate();
-  const [user] = useState({ email: "timmy@gmail.com" });
+  const [user] = useState({ email: "jim@gmail.com" });
   const [players, setPlayers] = useState([]);
   const url = getEnv();
 
@@ -49,9 +49,7 @@ const GameCard = ({ game }) => {
     history('/lobby/' + game._id);
   }
 
-  function leaveGame() {
-    
-  }
+  function leaveGame() {}
 
   return (
     <div>
@@ -71,6 +69,7 @@ const GameCard = ({ game }) => {
                 Winner: {game.winner.email}
                 <br></br>
                 <br></br>
+                Game Log:
                 {game.gameLog.map(((update, i) =>
                 <div key={i}>
                   <span>{update?.player.email} {update?.move} {update?.bet} </span>
