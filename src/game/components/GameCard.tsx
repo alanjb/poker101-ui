@@ -8,7 +8,7 @@ import { getEnv } from '../../app/config/utils';
 const GameCard = ({ game }) => {
   const [joined, setJoined] = useState(false);
   const history = useNavigate();
-  const [user] = useState({ email: "jim@gmail.com" });
+  const [user] = useState({ email: "timmy@gmail.com" });
   const [players, setPlayers] = useState([]);
   const url = getEnv();
 
@@ -64,8 +64,21 @@ const GameCard = ({ game }) => {
                 Players: {players.map((player,i) => {
                   return <span key={i}> {player.email}{i+1 < players.length && ','} </span>
                 })}
-            </div>
+              </div>
             )}
+            {game && game.status === 'complete' &&
+              <div>
+                Winner: {game.winner.email}
+                <br></br>
+                <br></br>
+                {game.gameLog.map(((update, i) =>
+                <div key={i}>
+                  <span>{update?.player.email} {update?.move} {update?.bet} </span>
+                </div>
+                ))}
+
+              </div>
+            }
           </CardTitle>
           <div>
             {(!joined && game.status === 'starting') && <Button onClick={() => addPlayer()}>

@@ -11,7 +11,7 @@ import { getEnv } from '../../app/config/utils';
 const GameBoardContainer = () => {
   const [isRaiseModalOpen, setRaiseModal] = useState(false);
   const { gameId } = useParams();
-  const [user] = useState({ email: "timmy@gmail.com" });
+  const [user] = useState({ email: "alan@gmail.com" });
   const [player, setPlayer] = useState(null);
   const [game, setGame] = useState(null);
   const [gameLogger, setGameLogger] = useState([]);
@@ -29,7 +29,7 @@ const GameBoardContainer = () => {
         setGame(res.data.game);
 
         //create a queue here so it shows correct order of events 
-        setGameLogger(res.data.game.roundCount === 1 ? res.data.game.roundOneMoves : res.data.game.roundTwoMoves);
+        setGameLogger(res.data.game.gameLog);
     
         const player = res.data.game.players.find(player => 
           player.email === user.email
@@ -51,8 +51,8 @@ const GameBoardContainer = () => {
             }
           })
     
-          setGameLogger(updatedGame.roundCount === 1 ? updatedGame.roundOneMoves : updatedGame.roundTwoMoves);
-    
+          setGameLogger(updatedGame.gameLog);
+
           const player = updatedGame.players.find(player => 
             player.email === user.email
           );
@@ -113,12 +113,24 @@ const GameBoardContainer = () => {
     toggleRaiseModal();
   }
 
-  const discard = () => {
-    
-  }
-
   const fold = () => {
-
+    axios
+      .put(`${url}/api/game/fold`, {
+        params: {
+          gameId: gameId,
+        }
+      })
+      .then(res => {
+        if (res.data.is_error) {
+          alert(res.data.message);
+        }
+        else {
+          alert(player.email + ' has folded');
+        }  
+      })
+      .catch(() => {
+        alert("Error: Failed to fold");
+      })
   }
 
   return (
@@ -159,7 +171,7 @@ const GameBoardContainer = () => {
           <div className="player-container user-player-container">
             <div className="player-game-controls-container">
                 <div className="player-cards-container">
-                  cards here
+                  {player.hand.map(card => <span>{card.symbol} {card.suit}<br/></span>)}
                 </div>
                 <br/> 
                 <Button className="game-button" color="secondary" onClick={check} disabled={!player.isTurn}>
@@ -174,14 +186,9 @@ const GameBoardContainer = () => {
                   Raise
                 </Button>
               
-                <Button className="game-button" color="warning" onClick={discard} disabled={!player.isTurn}>
-                  Discard 
-                </Button>
-              
                 <Button className="game-button" color="danger" onClick={fold} disabled={!player.isTurn}>
                   Fold
                 </Button>
-              
               <br />
               <br/>
 
@@ -196,7 +203,7 @@ const GameBoardContainer = () => {
               </div>
               {gameLogger.map(((update, i) =>
                 <div key={i}>
-                  <span>{i === 0 ? 'Dealer: ' : 'Player  ' + i + ': '}{update?.player} {update?.move} {update?.bet} </span>
+                  <span>{update?.player.email} {update?.move} {update?.bet} </span>
                 </div>
                 ))}
             </div>
